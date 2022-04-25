@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router"
 import { localCache } from '../utils/cache'
-import { firstMenu } from '../utils/map-menus'
+import { firstMenu, mapMenusRoutes } from '../utils/map-menus'
+import { showMsg } from '@/utils/showMsg'
 const routes = [
   {
     path: "/",
@@ -32,15 +33,19 @@ const router = createRouter({
 
 router.beforeEach((to, from) => {
   if (to.path !== '/login') {
-    console.log(localCache)
-    const token = localCache?.getCatch('token')
-    if (!token) {
-      console.log("not token")
+    const token = localCache.getCatch('token')
+    const nowTime = new Date().getTime()
+    const expirationTime = localCache.getCatch('expirationTime')
+   
+    if (!token || nowTime > expirationTime) {
+      showMsg.err('token过期，请重新登录。')
+      localCache.claerCache()
       return '/login'
     }
   }
-
+  
   if (to.path === '/main') {
+    // 动态添加路由
     return firstMenu.path
   }
 })

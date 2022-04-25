@@ -2,32 +2,35 @@
 // login -> module
 import { accountLoginRequest, requestUserInfoById } from "@/service/login/login"
 import { localCache } from '@/utils/cache'
-import showMsg from '@/utils/showMsg'
+import { showMsg } from '@/utils/showMsg'
 import router from "@/router"
 import { mapMenusRoutes } from '@/utils/map-menus'
-import $message from '@/utils/showMsg'
 
-// 定义两个泛型<S, R> : 模块，根
+
 const loginModule = {
   namespaced: true,
   state() {
     return {
-      token: '',
-      userInfo: {}
+      token: localCache.getCatch('token'),
+      userInfo: localCache.getCatch('userInfo') || {},
+      menus: localCache.getCatch('currentMenu') || [],
     }
   },
   getters: {},
   mutations: {
     changeUserToken(state, token) {
       state.token = token
+      localCache.setCatch('token', token)
     },
-    changeUserInfo(state, userInfo) {
-      state.userInfo = userInfo
+    changeUserInfo(state, data) {
+      state.userInfo = data
+      localCache.setCatch("userInfo", data)
     },
-    changeUserMenu(state, menu) {
-      state.menu = menu
+    changeUserMenu(state, menus) {
+      state.menus = menus
       // 获取路由
-      const routes = mapMenusRoutes(menu)
+      const routes = mapMenusRoutes(menus)
+      localCache.setCatch('currentMenu', menus)
       // 动态注册路由
       routes.forEach(route => {
         router.addRoute('main', route)
@@ -40,37 +43,36 @@ const loginModule = {
       // 1. 实现登录逻辑
       try {
 
-        const loginResult = await accountLoginRequest(payload)
+        const loginResult = await accountLoginRequest(payload) // 发送请求
+        
         const { token, userid } = loginResult['data']
 
         // 1.1 保存数据
         commit('changeUserToken', token)
-        localCache.setCatch('token', token)
+        
+        // 设置过期时间
+        localCache.setCatch('expirationTime', new Date().getTime() + 60*60*1000)
 
         // 2. 请求用户信息
-        const userInfo = await requestUserInfoById(userid, token)
-        localCache.setCatch("userInfo", userInfo.data)
-        commit("changeUserInfo", userInfo.data)
+        const userInfo = await requestUserInfoById(userid)
+        commit("changeUserInfo", userInfo.data || {})
 
         // 3. 登录成功
         showMsg.success("登录成功")
+        const localUserInfo = localCache.getCatch("userInfo")
+        localUserInfo && commit("changeUserMenu", localUserInfo?.user?.menu)
 
         router.push('/main')
       } catch (error) {
-        console.log($message)
-        console.dir(error)
+        showMsg.err('账号密码错误，请检查')
+        console.log(error)
       }
     },
     initLoginState({ commit }) {
-      console.log(localCache.getCatch('token'))
-      const token = localCache.getCatch('token')
       const userInfo = localCache.getCatch("userInfo")
-      if (token) {
-        commit("changeUserToken", token)
-      }
+      
       if (userInfo) {
-        console.log(userInfo)
-        commit("changeUserMenu", userInfo.user.menu)
+        commit("changeUserMenu", userInfo?.user?.menu || [])
       }
     }
   }

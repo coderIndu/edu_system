@@ -1,6 +1,5 @@
-import jfRequest from "../index"
-
-// 枚举
+import http from "../index"
+import { parseParams } from "@/service/request"
 const url = {
   login: "/users/login",
   getInfo: "/user"
@@ -8,20 +7,17 @@ const url = {
 
 
 export function accountLoginRequest(account) {
-  return jfRequest.request({
-    method: "POST",
-    url: url.login,
-    data: { user: account }
-  })
+  return http.post(url.login, { user: account })
 }
 
-export function requestUserInfoById(userid, token) {
-  return jfRequest.request({
-    method: "GET",
-    url: url.getInfo,
-    params: { userid },
-    headers: {
-      authorization: `Bearer ${token}`
-    }
-  })
+export function requestUserInfoById(userid) {
+  return http.get(`${url.getInfo}?${parseParams({userid})}`)
+  // return jfRequest.request({
+  //   method: "GET",
+  //   url: url.getInfo,
+  //   params: { userid },
+  //   headers: {
+  //     authorization: `Bearer ${token}`
+  //   }
+  // })
 }

@@ -1,6 +1,7 @@
 import { createStore } from "vuex"
 import login from "./login/login"
 import { localCache } from '../utils/cache'
+import header from './header'
 const store = createStore({
   state() {
     return {
@@ -12,7 +13,8 @@ const store = createStore({
   getters: {},
   actions: {},
   modules: {
-    login
+    login,
+    header
   }
 })
 

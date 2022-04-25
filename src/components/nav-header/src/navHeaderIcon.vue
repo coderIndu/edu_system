@@ -13,7 +13,7 @@
     </span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>
+        <el-dropdown-item @click="quit">
           <el-icon>
             <circle-close-filled />
           </el-icon>退出登录
@@ -36,13 +36,20 @@
 <script setup>
 import { CircleCloseFilled, User, Tools } from '@element-plus/icons'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 
 const store = useStore()
-const username = ref('未设置名称')
+const router = useRouter()
+
+const username = ref('匿名')  // 用户名
 
 username.value = store.state.username.username
 
+// 退出登录
+function quit() { 
+  router.push('/login')
+}
 </script>
 
 <style lang="less" scoped>

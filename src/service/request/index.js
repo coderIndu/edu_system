@@ -1,60 +1,111 @@
 import axios from "axios"
-import { ElLoading } from "element-plus"
-import { with404, with401 } from '../status/index'
+import qs from 'qs'
+import {showMsg} from '@/utils/showMsg'
+import { localCache } from '@/utils/cache'
 
-class JFRequest {
+class Axios {
   // axios的一个实例
   instance
-  interceptors
-  showLoading
-  loading
 
   constructor(config) {
     this.instance = axios.create(config)
-    this.interceptors = config.interceptors
-    this.showLoading = config.showLoading ?? true
-    this.instance.interceptors.request.use(
-      this.interceptors?.requestInterceptor,
-      this.interceptors?.requestInterceptorCatch
-    )
 
-    this.instance.interceptors.response.use(
-      this.interceptors?.responceInterceptor,
-      this.interceptors?.responceInterceptorCatch
-    )
+    this.instance.interceptors.request.use((config) => {
+      console.log('请求发出');
+      // console.log(config);
+      let contentType = ''
+      if (config.type == 'form') {
+        contentType = 'application/x-www-form-urlencoded'
+        console.info('--------------------------------- 请求拦截 ---------------------------------', config)
+      } else if (config.type == 'formData') {
+        contentType = 'multipart/form-data'
+      } else if (config.type == 'json') {
+        contentType = 'application/json; charset=utf-8'
+      }
 
-    this.instance.interceptors.request.use((req) => {
-      console.log("所有的请求拦截")
-      return req
-    })
+      const token = localCache.getCatch('token') ?? ''
+      if (token) {
+        config.headers = {
+          'authorization': token,
+          'Content-Type': contentType
+        }
+      }
+     
+      return config
+    }, err=>{})
 
     this.instance.interceptors.response.use((res) => {
-      console.log("所有的响应拦截")
-      // console.log(res.status, with404())
       const code = res.status
       switch (code) {
-        case 404: { with404(); break }
-        case 401: { with401(); break }
+        case 404: { showMsg.err('响应失败。'); break }
+        case 401: { showMsg.err('权限不足。'); break }
         default: { break }
       }
       return res
     })
   }
   // 发送请求
-  request(config) {
-    // 单个请求对请求config的处理
-    if (config.interceptors?.requestInterceptor) {
-      config = config.interceptors.requestInterceptor(config)
-    }
+  request(method, api, data, type) {
+    // console.log(api);
+    return new Promise(resolve => {
+      this.instance({
+        method,
+        url: api,
+        data,
+        type
+      }).then(res => resolve(res)).catch(err => resolve(err))
+    })
+  }
 
-    // 判断是否需要显示loading
-    if (config.showLoading) {
-      this.showLoading = config.showLoading
-    }
+  get(api, data) {
+    return this.request('get', api, data)
+  }
 
-    // 发送请求
-    return this.instance.request(config)
+  post(api, data, type='json') {
+    if (type == 'form') data = qs.stringify(data)
+    else if (type == 'formData') data = setFormData(data)
+    return this.request('post', api, data, type)
   }
 }
 
-export default JFRequest
+/**
+ * 转换成formdata格式数据
+ * @param {被formdata的数据} source 
+ * @returns 
+ */
+function setFormData(source) {
+  var data = {}
+  if (Object.keys(source).length > 0) {
+      if (source instanceof FormData) {
+          data = source
+      } else {
+          var formdata = new FormData()
+          for (let i in source) {
+              formdata.append(i, source[i])
+          }
+          data = formdata
+      }
+  }
+  return data
+}
+
+/**
+ * 序列化对象为query格式
+ * @param {被序列化的数据，一般用于get请求} source 
+ * @returns 
+ */
+export function parseParams(source) {
+  try {
+    var temps = []
+    for(let i in source) {
+      var key = i
+      var value = source[i]
+      if ( typeof(source[i]) == 'object') value = JSON.stringify(value)
+      temps.push(`${key}=${value}`)
+    }
+    return temps.join('&')
+  } catch (err) {
+    return ''
+  }
+}
+export default Axios

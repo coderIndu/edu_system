@@ -1,37 +1,36 @@
 import { ElMessage } from 'element-plus'
 
-class ShowMsg {
-  init = {
-    center: true,
-    showClose: true
-  }
+const init = {
+  center: true,
+  showClose: true,
+}
+export const showMsg = {
   err(msg) {
     ElMessage.error({
       message: msg,
-      ...this.init
+      ...init
     })
-  }
+  },
   success(msg) {
     ElMessage({
       type: 'success',
       message: msg,
-      ...this.init
+      ...init
     })
-  }
+  },
   message(msg) {
     ElMessage({
       type: 'message',
       message: msg,
-      ...this.init
+      ...init
     })
-  }
+  },
   waring(msg) {
     ElMessage({
       type: 'waring',
       message: msg,
-      ...this.init
+      ...init
     })
   }
 }
 
-export default new ShowMsg()

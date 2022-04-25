@@ -4,9 +4,11 @@
       <NavMenu :roll="isRoll"></NavMenu>
     </el-aside>
     <el-container>
+      <!-- 头部 -->
       <el-header>
         <NavHeader @foldChange="foldChange"></NavHeader>
       </el-header>
+      <!-- 主体内容 -->
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -32,7 +34,7 @@ const foldChange = (isFold) => {
   .el-header {
     background-color: #f6f6f6;
     color: var(--el-text-color-primary);
-    height: 35px;
+    height: 40px;
     // text-align: center;
     // line-height: 30px;
   }
@@ -42,6 +44,9 @@ const foldChange = (isFold) => {
     color: var(--el-text-color-primary);
     text-align: center;
     height: 100vh;
+  }
+  .el-main {
+    background-color: #f9f9f9;
   }
 }
 </style>

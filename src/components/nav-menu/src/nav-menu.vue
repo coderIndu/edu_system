@@ -30,24 +30,38 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { defineProps, computed, ref } from 'vue'
+import { defineProps, ref, nextTick  } from 'vue'
+import { useStore, mapActions } from 'vuex'
 import navIcon from './nav-icon.vue';
+
 import { sessionCache } from "@/utils/cache"
+import { useMapStates, useMapActions } from "@/utils/useMapStore.js"
+import { getBreadcrumbList } from '@/utils/common/setBreadCrumb.js' // 设置面包屑
 
 const router = useRouter()
-
+const route = useRoute()
 const store = useStore()
+// 获取vuex中的值
+const loginStates = useMapStates(['menus'], 'login') // login
+const headerActions = useMapActions(['ac_setBreadcrumb'], 'header');
 
-// data
-const usermenu = computed(() => store.state.login.menu).value
+// const user = useMapMutations()
+const usermenu = loginStates.menus
 
 const activeIndex = ref(sessionCache.getCatch('activeIndex') ?? '0-0')
 
 const getActiveIndex = (index) => {
+  // 设置刷新页面后的菜单默认位置
   sessionCache.setCatch('activeIndex', index)
-  console.log(sessionCache.getCatch('activeIndex'))
+  
+  // 设置面包屑
+  router.beforeEach((to, from, next) => {
+    // to and from are both route objects. must call `next`.
+    const breadcrumbList = getBreadcrumbList(to.fullPath)
+    headerActions.ac_setBreadcrumb(breadcrumbList)
+    next()
+  })
 }
 
 
@@ -57,12 +71,14 @@ const props = defineProps({
     defalut: false
   }
 })
+
 const handleMenuItemClick = (item) => {
   router.push({
     path: item ?? '/notFound'
   })
-  // console.log("233", item)
 }
+
+
 </script>
 
 <style lang="less" scoped>
@@ -71,14 +87,14 @@ const handleMenuItemClick = (item) => {
   background-color: #001529;
   .log {
     display: flex;
-    height: 35px;
+    height: 60px;
     // padding: 12px 10px 8px 10px;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
     .img {
-      height: 80%;
-      margin: 0 17px;
+      height: 60%;
+      margin: 0 20px 0 10PX;
     }
 
     .title {

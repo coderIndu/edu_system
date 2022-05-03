@@ -12,7 +12,7 @@
             </el-icon>用户登录
           </span>
         </template>
-        <login-account ref="loginAccountRef" />
+        <login-account ref="loginAccountRef" @login="getFormData" />
       </el-tab-pane>
       <!-- 手机登录 -->
       <el-tab-pane name="phone">
@@ -39,7 +39,6 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { Cellphone, UserFilled } from "@element-plus/icons-vue"
 import LoginAccount from "./login-account.vue";
 import LoginPhone from "./login-phone.vue";
 import Register from './register.vue';
@@ -51,7 +50,7 @@ const loginPhoneRef = ref()
 const tabName = ref("account")
 const isShowDialog = ref(false)  // 是否显示弹窗
 
-// 定义方法
+// 点击开始登录
 function getFormData() {
   // console.log("点击成功")
   if (tabName.value === 'account') {

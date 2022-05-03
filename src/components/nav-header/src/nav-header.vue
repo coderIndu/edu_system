@@ -6,7 +6,7 @@
     <div class="content">
       <div>
         <el-breadcrumb :separator-icon="ArrowRight">
-          <el-breadcrumb-item v-for="(item, index) of breadcrumbList" :to="{ }" :key="index">{{item}}</el-breadcrumb-item>
+          <el-breadcrumb-item v-for="(item, index) of breadcrumb" :to="{ }" :key="index">{{item}}</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <NavHeaderIcon></NavHeaderIcon>
@@ -34,7 +34,7 @@ const handleFoldChange = () => {
 // 面包屑
 // 筛选面包屑title
 const { breadcrumb } = useMapStates(['breadcrumb'], 'header')
-const breadcrumbList = ref(breadcrumb)
+console.log(breadcrumb)
 
 </script>
 

@@ -5,7 +5,7 @@
         <el-input v-model="account.userid"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input autocomplete="on" type="password" v-model="account.password"></el-input>
+        <el-input autocomplete="on" type="password" v-model="account.password" @keyup.enter="emit('login')"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -17,17 +17,22 @@ import { useStore } from 'vuex'
 import { rules } from '../config/account-config'
 import { localCache } from '@/utils/cache'
 
+// 定义emit和props
+const emit = defineEmits(['login'])
+
 // 定义vuex
 const store = useStore()
 
+// 定义用户名和密码
 const account = reactive({
   userid: localCache.getCatch('userid'),
   password: localCache.getCatch('password') 
 })
+// 定义组件ref
 const formRef = ref()
 
 // 发送请求
-const loginAction = (isChecked) => {
+const loginAction = (isChecked = true) => {
   formRef.value?.validate((valid) => {
     if (valid) {
       console.log("验证成功，开始登陆")

@@ -1,5 +1,5 @@
 import { localCache } from '@/utils/cache'
-
+import { getBreadcrumbList } from '@/utils/common/setBreadCrumb'
 export default {
   namespaced: true,
   state() {
@@ -11,30 +11,10 @@ export default {
 
   },
   mutations: {
-    setBreadcrumb(state, data) {
-      state.breadcrumb = data
-      localCache.setCatch('breadcrumb', data)
-    },
-    setBreadcrumbList(state, findpath) {
-      const menus = localCache.getCatch('currentMenu')
-      let findArr = []
-      menus.forEach(item => {
-        // 变量子元素
-        item?.children.forEach(i => {
-          if(i.url === findpath) {
-           findArr =  [item.name, i.name]
-          }
-        })
-      })
+    setBreadcrumb(state, path) {
+      const findArr = getBreadcrumbList(path)
       state.breadcrumb = findArr
-    }
-  },
-  actions: {
-    ac_setBreadcrumb({commit}, data) {
-      commit('setBreadcrumb', data)
-    },
-    ac_setBreadcrumbList({ commit }, data) {
-      commit('setBreadcrumbList', data)
+      localCache.setCatch('breadcrumb', findArr)
     }
   }
 }

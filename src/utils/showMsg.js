@@ -3,7 +3,9 @@ import { ElMessage } from 'element-plus'
 const init = {
   center: true,
   showClose: true,
+  duration: 1000
 }
+
 export const showMsg = {
   err(msg) {
     ElMessage.error({

@@ -45,7 +45,7 @@ class SessionCache {
     window.sessionStorage.removeItem(key)
   }
 
-  claerCache() {
+  clear() {
     window.sessionStorage.clear()
   }
 }

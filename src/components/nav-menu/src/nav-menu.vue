@@ -30,52 +30,50 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import { defineProps, ref  } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import navIcon from './nav-icon.vue';
 import { sessionCache } from "@/utils/cache"
-import { useMapStates, useMapActions } from "@/utils/useMapStore.js"
+import { useMapStates } from "@/utils/useMapStore.js"
 import { getBreadcrumbList } from '@/utils/common/setBreadCrumb.js' // 设置面包屑
 
-const router = useRouter()
 
-// 定义props
+// 定义模块数据
 const props = defineProps({
   roll: { 
     type: Boolean,
     defalut: false
   }
 })
+const router = useRouter()
+const store = useStore()
+
 // 获取vuex中的值
 const loginStates = useMapStates(['menus'], 'login') // login
-const headerActions = useMapActions(['ac_setBreadcrumb'], 'header');
+
+// 定义组件数据
+const usermenu = loginStates.menus    // 路由菜单
+const activeIndex = ref(sessionCache.getCatch('activeIndex') || '0-0')  // 默认显示的菜单路由
 
 
-const usermenu = loginStates.menus
-const activeIndex = ref(sessionCache.getCatch('activeIndex') ?? '0-0')
-
+// 设置菜单刷新后位置
 const getActiveIndex = (index) => {
   // 设置刷新页面后的菜单默认位置
-  sessionCache.setCatch('activeIndex', index)
-  
-  // 设置面包屑
-  router.beforeEach((to, from, next) => {
-    // to and from are both route objects. must call `next`.
-    const breadcrumbList = getBreadcrumbList(to.fullPath)
-    headerActions.ac_setBreadcrumb(breadcrumbList)
-    next()
-  })
+  sessionCache.setCatch('activeIndex', index) 
 }
-
-
-
-
+// 点击菜单跳转路由
 const handleMenuItemClick = (item) => {
   router.push({
     path: item ?? '/notFound'
   })
 }
 
+// 组件内路由导航守卫
+onBeforeRouteUpdate((to, from) => {  // 组件路由改变后触发
+  // 设置面包屑
+  store.commit("header/setBreadcrumb", to.fullPath)
+}) 
 
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="70%" :style="{'height': '80%'}" >
+  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="70%">
     <!-- 上传下载部分 -->
     <div class="header-edit" width="150px">
       <!-- 上传 -->
@@ -56,6 +56,7 @@ const close = () => {
 // 上传部分
 const handleChange = async (source) => {
   console.log(source);
+  // 1. 文件信息
   let para = {
     name: source.file.name,
     type: source.file.type,
@@ -63,8 +64,10 @@ const handleChange = async (source) => {
     size: source.file.size,
     file: source.file
   }
+  // 2. 发送文件
   const res = await $http.post($apis.uploadFile, para, 'formData')
 
+  // 3. 接受响应
   if(res.data.status === 200) {  // 上传成功
     showMsg.success('上传成功')
   } else {

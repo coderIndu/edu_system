@@ -1,16 +1,16 @@
 <template>
-  <el-dialog v-model="dialogVisible" @close="close" title="用户修改" width="40%">
+  <el-dialog v-model="dialogVisible" @close="close" title="用户修改" width="50%">
     <el-form
       ref="ruleFormRef"
       :model="ruleForm"
       status-icon
-      :rules="rules"
+      :rules="rule"
       class="demo-ruleForm"
       label-position="left"
       label-width="80px"
     >
       <el-form-item label="身份" prop="order">
-        <el-select v-model="value" class="m-2" placeholder="Select" size="large">
+        <el-select v-model="ruleForm.order" class="m-2" placeholder="Select" size="large">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -26,61 +26,38 @@
         <el-input v-model="ruleForm.username" type="text" autocomplete="off" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model.number="ruleForm.password" type="password"/>
+        <el-input v-model="ruleForm.password" type="password"/>
       </el-form-item>
       <el-form-item label="确认密码" prop="password_confirm">
-        <el-input v-model.number="ruleForm.password_confirm" type="password"/>
+        <el-input v-model="ruleForm.password_confirm" type="password"/>
       </el-form-item>
-      <el-form-item label="专业/班级" prop="class">
-        <el-input v-model.number="ruleForm.class" />
+      <el-form-item label="专业" prop="class">
+        <el-input v-model="ruleForm.profession" />
+      </el-form-item>
+      <el-form-item label="班级" prop="class">
+        <el-input v-model="ruleForm.class" />
       </el-form-item>
 
       <!-- 提交表单部分 -->
       <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">提交</el-button>
-        <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+        <el-button type="primary" @click="submitForm(ruleForm)">提交</el-button>
+        <el-button @click="resetForm(ruleForm)">重置</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
 </template>
 
 <script setup>
-import { ElForm, ElFormItem, ElDialog, ElInput, ElButton, ElSelect, ElOption } from 'element-plus'
-import { ref, defineEmits, watch, reactive } from 'vue'
+import { ref, defineEmits, reactive } from 'vue'
 import { showMsg } from '@/utils/showMsg'
+import { rules, form } from '../config/account-config'
 // 获取props
 const emit = defineEmits(['close'])
-// 是否显示跳窗
+// 是否显示弹窗
 const dialogVisible = ref(true)
-
-function close() {
-  dialogVisible.value = false
-  emit('close', dialogVisible.value)
-}
-
-const ruleForm = reactive({
-  order: '学生',
-  userid: '20188888',
-  username: '蒋锋',
-  password: '123321',
-  password_confirm: '123321',
-  class: '1班'
-})
-// const rules = reactive({
-//   pass: [{ validator: validatePass, trigger: 'blur' }],
-//   checkPass: [{ validator: validatePass2, trigger: 'blur' }],
-//   age: [{ validator: checkAge, trigger: 'blur' }],
-// })
-const submitForm = function () {
-  showMsg.success('注册成功')
-}
-
-const resetForm = function () {
-
-}
-
-// 
-const value = ref('')
+const rule = ref(rules)   // 表单验证
+let ruleForm = reactive(form)  // 表单数据
+// 选择身份
 const options = [
   {
     value: 'student',
@@ -91,7 +68,29 @@ const options = [
     label: '教师',
   },
 ]
+
+// 关闭弹窗
+function close() {
+  dialogVisible.value = false
+  emit('close', dialogVisible.value)
+}
+
+// 提交表单
+const submitForm = function () {
+  showMsg.success('注册成功')
+}
+
+// 清空表单
+const resetForm = function () {
+  Object.keys(ruleForm).forEach(item => {
+    ruleForm[item] = ''
+  })
+}
+
 </script>
 
 <style lang="less" scoped>
+.el-input {
+  width: 200px;
+}
 </style>

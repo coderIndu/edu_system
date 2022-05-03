@@ -2,13 +2,13 @@
   <div class="nav-menu">
     <div class="log">
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
-      <span class="title" v-show="!props.roll">系统管理</span>
+      <span class="title" v-show="!roll">系统管理</span>
     </div>
 
     <el-menu
       :default-active="activeIndex"
       class="el-menu-vertical"
-      :collapse="props.roll"
+      :collapse="roll"
       background-color="#0c2135"
       text-color="#b7bdc3"
       active-text-color="#0a60bd"
@@ -30,25 +30,28 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
-import { defineProps, ref, nextTick  } from 'vue'
-import { useStore, mapActions } from 'vuex'
+import { useRouter } from 'vue-router'
+import { defineProps, ref  } from 'vue'
 import navIcon from './nav-icon.vue';
-
 import { sessionCache } from "@/utils/cache"
 import { useMapStates, useMapActions } from "@/utils/useMapStore.js"
 import { getBreadcrumbList } from '@/utils/common/setBreadCrumb.js' // 设置面包屑
 
 const router = useRouter()
-const route = useRoute()
-const store = useStore()
+
+// 定义props
+const props = defineProps({
+  roll: { 
+    type: Boolean,
+    defalut: false
+  }
+})
 // 获取vuex中的值
 const loginStates = useMapStates(['menus'], 'login') // login
 const headerActions = useMapActions(['ac_setBreadcrumb'], 'header');
 
-// const user = useMapMutations()
-const usermenu = loginStates.menus
 
+const usermenu = loginStates.menus
 const activeIndex = ref(sessionCache.getCatch('activeIndex') ?? '0-0')
 
 const getActiveIndex = (index) => {
@@ -65,12 +68,7 @@ const getActiveIndex = (index) => {
 }
 
 
-const props = defineProps({
-  roll: {
-    type: Boolean,
-    defalut: false
-  }
-})
+
 
 const handleMenuItemClick = (item) => {
   router.push({

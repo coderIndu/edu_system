@@ -1,8 +1,8 @@
 import http from "../index"
 import { parseParams } from "@/service/request"
 const url = {
-  login: "/users/login",
-  getInfo: "/user"
+  login: "/users/login",  // 用户登录
+  getInfo: "/user"        // 获取用户信息
 }
 
 

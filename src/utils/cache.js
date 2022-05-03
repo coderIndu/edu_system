@@ -9,6 +9,11 @@ class LocalCache {
 
   getCatch(key) {
     const value = window.localStorage.getItem(key)
+    
+    if(value===null) {
+      return ''
+    } 
+
     return JSON.parse(value)
   }
 
@@ -16,7 +21,7 @@ class LocalCache {
     window.localStorage.removeItem(key)
   }
 
-  claerCache() {
+  clear() {
     window.localStorage.clear()
   }
 }
@@ -27,11 +32,13 @@ class SessionCache {
   }
 
   getCatch(key) {
+
     const value = window.sessionStorage.getItem(key)
+    if(value===null) {
+      return ''
+    } 
+
     return JSON.parse(value)
-    // if (value) {
-    //   return JSON.parse(value)
-    // }
   }
 
   deleteCache(key) {

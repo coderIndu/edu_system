@@ -1,6 +1,6 @@
 import axios from "axios"
 import qs from 'qs'
-import {showMsg} from '@/utils/showMsg'
+import { showMsg } from '@/utils/showMsg'
 import { localCache } from '@/utils/cache'
 
 class Axios {
@@ -30,7 +30,6 @@ class Axios {
           'Content-Type': contentType
         }
       }
-     
       return config
     }, err=>{})
 
@@ -44,7 +43,14 @@ class Axios {
       return res
     })
   }
-  // 发送请求
+  /**
+   * 发送请求
+   * @param {*} method 请求方式
+   * @param {*} api 请求地址
+   * @param {*} data 发送的数据
+   * @param {*} type 请求方式
+   * @returns 
+   */
   request(method, api, data, type) {
     // console.log(api);
     return new Promise(resolve => {
@@ -57,10 +63,23 @@ class Axios {
     })
   }
 
+  /**
+   * GET请求
+   * @param {*} api 
+   * @param {*} data 
+   * @returns 
+   */
   get(api, data) {
     return this.request('get', api, data)
   }
 
+  /**
+   * POST请求
+   * @param {*} api 
+   * @param {*} data 
+   * @param {*} type 
+   * @returns 
+   */
   post(api, data, type='json') {
     if (type == 'form') data = qs.stringify(data)
     else if (type == 'formData') data = setFormData(data)
@@ -70,7 +89,7 @@ class Axios {
 
 /**
  * 转换成formdata格式数据
- * @param {被formdata的数据} source 
+ * @param {*} source 被formdata的数据
  * @returns 
  */
 function setFormData(source) {
@@ -91,7 +110,7 @@ function setFormData(source) {
 
 /**
  * 序列化对象为query格式
- * @param {被序列化的数据，一般用于get请求} source 
+ * @param {*} source 被序列化的数据，一般用于get请求
  * @returns 
  */
 export function parseParams(source) {
@@ -108,4 +127,5 @@ export function parseParams(source) {
     return ''
   }
 }
+
 export default Axios

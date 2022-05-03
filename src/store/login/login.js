@@ -11,7 +11,7 @@ const loginModule = {
   namespaced: true,
   state() {
     return {
-      token: localCache.getCatch('token'),
+      token: localCache.getCatch('token') || '',
       userInfo: localCache.getCatch('userInfo') || {},
       menus: localCache.getCatch('currentMenu') || [],
     }
@@ -64,7 +64,7 @@ const loginModule = {
 
         router.push('/main')
       } catch (error) {
-        showMsg.err('账号密码错误，请检查')
+        showMsg.err('账号/密码错误，请检查')
         console.log(error)
       }
     },

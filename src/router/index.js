@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router"
 import { localCache } from '../utils/cache'
-import { firstMenu, mapMenusRoutes } from '../utils/map-menus'
+import { firstMenu } from '../utils/map-menus'
 import { showMsg } from '@/utils/showMsg'
 const routes = [
   {
@@ -37,11 +37,15 @@ router.beforeEach((to, from) => {
     const nowTime = new Date().getTime()
     const expirationTime = localCache.getCatch('expirationTime')
    
-    if (!token || nowTime > expirationTime) {
+    // token过期重新登录
+    if (token && nowTime > expirationTime) {
       showMsg.err('token过期，请重新登录。')
       localCache.claerCache()
       return '/login'
+    } else if(!token){   // 没有token首次登录
+      return '/login'
     }
+   
   }
   
   if (to.path === '/main') {

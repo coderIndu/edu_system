@@ -19,9 +19,10 @@ import { localCache } from '@/utils/cache'
 
 // 定义vuex
 const store = useStore()
+
 const account = reactive({
-  userid: localCache.getCatch('userid') ?? '',
-  password: localCache.getCatch('password') ?? ''
+  userid: localCache.getCatch('userid'),
+  password: localCache.getCatch('password') 
 })
 const formRef = ref()
 

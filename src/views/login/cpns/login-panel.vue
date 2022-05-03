@@ -38,17 +38,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { Cellphone, UserFilled } from "@element-plus/icons-vue"
 import LoginAccount from "./login-account.vue";
 import LoginPhone from "./login-phone.vue";
 import Register from './register.vue';
+import { showMsg } from '@/utils/showMsg'
 // 定义属性
 const isChecked = ref(true)
 const loginAccountRef = ref()
 const loginPhoneRef = ref()
 const tabName = ref("account")
 const isShowDialog = ref(false)  // 是否显示弹窗
+
 // 定义方法
 function getFormData() {
   // console.log("点击成功")
@@ -60,10 +62,15 @@ function getFormData() {
     console.log(loginPhoneRef)
   }
 }
+
+// 显示弹窗
 function showDialog() {
   isShowDialog.value = true
-  console.log(isShowDialog.value)
 }
+
+onMounted(() => {
+  showMsg.success('欢迎~awa~到来')
+})
 </script>
 
 <style scoped lang="less">

@@ -5,14 +5,6 @@
       <el-table-column prop="name" label="课程名称" width="180" />
       <el-table-column prop="address" label="课程内容"></el-table-column>
       <el-table-column prop="address" label="操作" class="edit">
-        <!-- <el-upload
-          class="upload-demo"
-          :http-request="handleChange"
-          :show-file-list="false"
-          action=""
-        >
-       
-        </el-upload> -->
         <el-button type="primary" @click="showDialog" size="small" plain>上传资源</el-button>
         <el-button type="danger" size="small" plain>删除</el-button>
       </el-table-column>
@@ -63,19 +55,18 @@ const handleChange = async (source) => {
     file: source.file
   }
   const res = await $http.post($apis.uploadFile, para, 'formData')
-
-  if(res.data.status === 200) {  // 上传成功
-    showMsg.success('上传成功')
-  } else {
-    showMsg.err('网络异常，请重试')
-  }
+  console.log(res);
+  // if(res.data.status === 200) {  // 上传成功
+  //   showMsg.success('上传成功')
+  // } else {
+  //   showMsg.err('网络异常，请重试')
+  // }
 }
 
 // 上传弹窗部分
 const isshow = ref(false)
 const showDialog = () => {
   isshow.value = true
-  console.log(isshow.value);
 }
 
 </script>

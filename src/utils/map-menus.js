@@ -14,7 +14,7 @@ export function mapMenusRoutes(menus) {
     const route = require("@/router/main" + key.split('.')[1])
     allRoutes.push(route.default)
   })
-
+  console.log(allRoutes, menus);
   // 2. 根据菜单获取需要添加的routes
   const _findGetRoute = (menus) => {
     for (const menu of menus) {

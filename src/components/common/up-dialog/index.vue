@@ -1,34 +1,43 @@
 <template>
-  <div>
-    <el-dialog v-model="dialogTableVisible" fullscreen top="5vh" title="上传" @close="close" width="90%" :modal="false">
-      <!-- 上传下载部分 -->
-      <div class="header-edit" width="150px">
+  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="70%" :style="{'height': '80%'}" >
+    <!-- 上传下载部分 -->
+    <div class="header-edit" width="150px">
+      <!-- 上传 -->
+      <el-upload
+        class="upload-demo"
+        :http-request="handleChange"
+        :show-file-list="false"
+        action=""
+      >
         <el-button type="primary" plain>
-        上传<el-icon class="el-icon--right" size="large"><Upload /></el-icon>
+          上传<el-icon class="el-icon--right" size="large"><Upload /></el-icon>
         </el-button>
-        <el-button type="success" plain>
-          批量下载<el-icon class="el-icon--right" size="large"><Download /></el-icon>
-        </el-button>
-      </div>
-      <!-- 主体表单部分 -->
-      <el-table :data="tableData" stripe>
-        <el-table-column type="selection" width="55" />
-        <el-table-column property="fileName" label="文件名" width="150" />
-        <el-table-column property="fileSize" label="文件大小" width="200" />
-        <el-table-column property="updateTime" label="更新事件" />
-        <el-table-column  label="操作">
-          <el-button type="danger" size="small" plain>下载</el-button>
-          <el-button type="danger" size="small" plain>删除</el-button>
-          <el-button type="danger" size="small" plain>重命名</el-button>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
-  </div>
+      </el-upload>
+      <!-- 下载 -->
+      <el-button type="success" plain>
+        批量下载<el-icon class="el-icon--right" size="large"><Download /></el-icon>
+      </el-button>
+    </div>
+    <!-- 主体表单部分 -->
+    <el-table class="el-dialog__body" :data="tableData" stripe>
+      <el-table-column type="selection" width="55" />
+      <el-table-column property="fileName" label="文件名" width="150" />
+      <el-table-column property="fileSize" label="文件大小" width="200" />
+      <el-table-column property="updateTime" label="更新事件" />
+      <el-table-column  label="操作">
+        <el-button type="danger" size="small" plain>下载</el-button>
+        <el-button type="danger" size="small" plain>删除</el-button>
+        <el-button type="danger" size="small" plain>重命名</el-button>
+      </el-table-column>
+    </el-table>
+  </el-dialog>
 </template>
 
 <script setup>
-import {ref, onMounted} from 'vue'
-import { Upload, Download } from '@element-plus/icons-vue'
+import {ref, onMounted, getCurrentInstance} from 'vue'
+const { proxy } = getCurrentInstance()  // 获取全局属性或方法
+const { $http, $apis, $utils: {showMsg} } = proxy  
+
 const emit = defineEmits(['close'])   // 设置emit
 
 const dialogTableVisible = ref(true)  // 是否显示
@@ -44,14 +53,38 @@ const close = () => {
   emit('close', '')
 }
 
-// 组件挂载
-onMounted(()=>{
+// 上传部分
+const handleChange = async (source) => {
+  console.log(source);
+  let para = {
+    name: source.file.name,
+    type: source.file.type,
+    lastModifiedDate: source.file.lastModifiedDate,
+    size: source.file.size,
+    file: source.file
+  }
+  const res = await $http.post($apis.uploadFile, para, 'formData')
 
+  if(res.data.status === 200) {  // 上传成功
+    showMsg.success('上传成功')
+  } else {
+    showMsg.err('网络异常，请重试')
+  }
+}
+
+onMounted(() => {
+  console.log('dialog')
 })
 </script>
 
 <style lang="less" scoped>
 .header-edit {
   margin-bottom: 20px;
+  display: flex;
+}
+
+.el-dialog__body{
+  height: 50vh;
+  overflow: auto;
 }
 </style>

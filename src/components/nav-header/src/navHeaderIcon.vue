@@ -34,10 +34,11 @@
 </template>
 
 <script setup>
-import { CircleCloseFilled, User, Tools } from '@element-plus/icons'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { localCache } from '@/utils/cache.js';
+
 
 const store = useStore()
 const router = useRouter()
@@ -48,6 +49,7 @@ username.value = store.state.username.username
 
 // 退出登录
 function quit() { 
+  localCache.clear()
   router.push('/login')
 }
 </script>

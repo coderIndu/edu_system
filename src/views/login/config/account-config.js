@@ -11,6 +11,13 @@ export const rules = {
       trigger: "blur"
     }
   ],
+  username: [
+    {
+      required: true,
+      message: "请输入姓名",
+      trigger: "blur"
+    }
+  ],
   password: [
     {
       required: true,
@@ -44,15 +51,22 @@ export const rules = {
     required: true,
     message: "请输入专业",
     trigger: "blur"
-  }]
+  }],
+  role: [
+    {
+      required: true,
+      message: "请选择身份",
+      trigger: "blur"
+    }
+  ]
 }
 
 export const form = {
-  order: '',
-  userid: '',
-  username: '',
-  password: '',
+  role: '',     // 身份
+  userid: '',   // id
+  username: '',     // 名字
+  password: '',     // 密码
   password_confirm: '',
-  profession: '',
-  class: ''
+  profession: '',   // 专业
+  class: ''         // 班级
 }

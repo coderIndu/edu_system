@@ -44,7 +44,7 @@ const router = useRouter()
 
 const username = ref('匿名')  // 用户名
 
-username.value = store.state.username.username
+store.state.username && (username.value = store.state.username)
 
 // 退出登录
 function quit() { 

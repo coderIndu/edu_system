@@ -3,13 +3,12 @@ import qs from 'qs'
 import { showMsg } from '@/utils/showMsg'
 import { localCache } from '@/utils/cache'
 
-class Axios {
-  // axios的一个实例
-  instance
-
+class DyAxios {
   constructor(config) {
+    // axios
     this.instance = axios.create(config)
 
+    // 请求拦截(添加token等)
     this.instance.interceptors.request.use((config) => {
       console.log('请求发出');
       // console.log(config);
@@ -33,14 +32,11 @@ class Axios {
       return config
     }, err=>{})
 
-    this.instance.interceptors.response.use((res) => {
-      const code = res.status
-      switch (code) {
-        case 404: { showMsg.err('响应失败。'); break }
-        case 401: { showMsg.err('权限不足。'); break }
-        default: { break }
-      }
-      return res
+    // 响应拦截(处理响应)
+    this.instance.interceptors.response.use(response => { // 对响应数据做点什么
+      return response
+    }, err => {    // 对响应错误做点什么
+      return Promise.reject(err.response)
     })
   }
   /**
@@ -53,13 +49,13 @@ class Axios {
    */
   request(method, api, data, type) {
     // console.log(api);
-    return new Promise(resolve => {
+    return new Promise((resolve, rejeact) => {
       this.instance({
         method,
         url: api,
         data,
         type
-      }).then(res => resolve(res)).catch(err => resolve(err))
+      }).then(res => resolve(res)).catch(err => rejeact(err))
     })
   }
 
@@ -128,4 +124,4 @@ export function parseParams(source) {
   }
 }
 
-export default Axios
+export default DyAxios

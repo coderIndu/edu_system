@@ -34,12 +34,14 @@
 </template>
 
 <script setup>
-import {ref, onMounted, getCurrentInstance} from 'vue'
-const { proxy } = getCurrentInstance()  // 获取全局属性或方法
-const { $http, $apis, $utils: {showMsg} } = proxy  
+import {ref, onMounted, inject} from 'vue'
+// 获取全局属性和方法
+const $http = inject('$http')
+const $apis = inject('$apis')
+const { showMsg } = inject('$utils')
 
-const emit = defineEmits(['close'])   // 设置emit
-
+// 设置emit
+const emit = defineEmits(['close'])
 const dialogTableVisible = ref(true)  // 是否显示
 
 const tableData = [{
@@ -66,13 +68,13 @@ const handleChange = async (source) => {
   }
   // 2. 发送文件
   const res = await $http.post($apis.uploadFile, para, 'formData')
-
+  console.log(res);
   // 3. 接受响应
-  if(res.data.status === 200) {  // 上传成功
-    showMsg.success('上传成功')
-  } else {
-    showMsg.err('网络异常，请重试')
-  }
+  // if(res.data.status === 200) {  // 上传成功
+  //   showMsg.success('上传成功')
+  // } else {
+  //   showMsg.err('网络异常，请重试')
+  // }
 }
 
 onMounted(() => {

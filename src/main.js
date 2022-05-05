@@ -19,9 +19,10 @@ for (const name in ElIcons){
 	app.component(name, ElIcons[name])
 }
 // 全局注册属性和方法
-app.config.globalProperties.$apis = apis 
-app.config.globalProperties.$http = http
-app.config.globalProperties.$utils = utils
+app.provide("$apis", apis)
+app.provide("$http", http)
+app.provide("$utils", utils)
+
 // 初始化token和menus
 store.dispatch("login/initLoginState", "")
 

@@ -34,7 +34,6 @@ const handleFoldChange = () => {
 // 面包屑
 // 筛选面包屑title
 const { breadcrumb } = useMapStates(['breadcrumb'], 'header')
-console.log(breadcrumb)
 
 </script>
 

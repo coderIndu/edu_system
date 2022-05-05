@@ -15,11 +15,11 @@
 </template>
 
 <script setup>
-import { getCurrentInstance, ref, onMounted } from 'vue'
+import { inject, ref } from 'vue'
 import UpDialog from '@/components/common/up-dialog'
- 
-const { proxy } = getCurrentInstance()  // 获取全局属性或方法
-const { $http, $apis, $utils: {showMsg} } = proxy  
+const $http = inject('$http')
+const $apis = inject('$apis')
+const { showMsg } = inject('$utils')
 
 const tableData = [
   {

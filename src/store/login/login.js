@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 // login -> module
-import { accountLoginRequest, requestUserInfoById } from "@/service/login/login"
+import { accountLoginRequest, requestUserInfoById } from "@/service/login"
 import { localCache } from '@/utils/cache'
 import { showMsg } from '@/utils/showMsg'
 import router from "@/router"

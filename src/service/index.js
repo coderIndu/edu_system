@@ -7,5 +7,4 @@ const http = new Axios({
   timeout: TIME_OUT
 })
 
-
 export default http

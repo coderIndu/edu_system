@@ -39,8 +39,8 @@ router.beforeEach((to, from) => {
    
     // token过期重新登录
     if (token && nowTime > expirationTime) {
-      showMsg.err('token过期，请重新登录。')
-      localCache.claerCache()
+      showMsg.waring('token过期，请重新登录。')
+      localCache.clear()
       return '/login'
     } else if(!token){   // 没有token首次登录
       return '/login'

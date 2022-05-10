@@ -5,8 +5,10 @@ import header from './header'
 const store = createStore({
   state() {
     return {
-      username: localCache.getCatch('userInfo')?.user.username || '',
-      password: localCache.getCatch("password") || ''
+      username: localCache.getCatch('userInfo')?.user?.username || '',
+      password: localCache.getCatch("password") || '',
+      user_id: localCache.getCatch('userInfo')?.user?.userid,
+      userInfo: localCache.getCatch('userInfo')?.user
     }
   },
   mutations: {},

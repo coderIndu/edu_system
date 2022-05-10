@@ -42,9 +42,7 @@ import { localCache, sessionCache } from '@/utils/cache.js'
 const store = useStore()
 const router = useRouter()
 
-const username = ref('匿名')  // 用户名
-
-store.state.username && (username.value = store.state.username)
+const username = store.state.username  // 用户名
 
 // 退出登录
 function quit() { 

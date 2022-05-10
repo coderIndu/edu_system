@@ -4,40 +4,37 @@
 
 class LocalCache {
   setCatch(key, value) {
-    window.localStorage.setItem(key, JSON.stringify(value))
+    if(value instanceof Object) {
+      value = JSON.stringify(value)
+    }
+    localStorage.setItem(key, value)
   }
 
   getCatch(key) {
-    const value = window.localStorage.getItem(key)
-    
-    if(value===null) {
-      return ''
-    } 
-
-    return JSON.parse(value)
+    let value = localStorage.getItem(key)
+    try {
+      return JSON.parse(value)
+    } catch (error) {
+      return value
+    }
   }
 
   deleteCache(key) {
-    window.localStorage.removeItem(key)
+   localStorage.removeItem(key)
   }
 
   clear() {
-    window.localStorage.clear()
+    localStorage.clear()
   }
 }
 
 class SessionCache {
   setCatch(key, value) {
-    window.sessionStorage.setItem(key, JSON.stringify(value))
+    sessionStorage.setItem(key, JSON.stringify(value))
   }
 
   getCatch(key) {
-
     const value = window.sessionStorage.getItem(key)
-    if(value===null) {
-      return ''
-    } 
-
     return JSON.parse(value)
   }
 

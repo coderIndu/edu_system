@@ -19,14 +19,22 @@
 <script setup>
 import { NavMenu } from '@/components/nav-menu';
 import { NavHeader } from '@/components/nav-header';
-import { ref } from 'vue'
+import { ref, onMounted, inject } from 'vue'
+import { useStore } from 'vuex'
 
+const store = useStore()
+const {showMsg} = inject('$utils')
 let isRoll = ref(false)
 
+// 切换导航显示隐藏
 const foldChange = (isFold) => {
   isRoll.value = isFold
   console.log(isFold)
 }
+
+onMounted(() => {
+  showMsg.success(`欢迎${store.state.username}~awa~到来`)
+})
 </script>
 
 <style scoped lang="less">

@@ -15,6 +15,7 @@ module.exports = {
     resolve: {
       extensions: ['.less', '.sass', '.css', '.js', '.vue'],
       alias: {
+        "src": "@",
         "cpns": "@/components",
         "views": "@/views",
       },

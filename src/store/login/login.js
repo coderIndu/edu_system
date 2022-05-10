@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 // login -> module
-import { accountLoginRequest, requestUserInfoById } from "@/service/login"
+import { accountLoginRequest, requestUserInfoById } from "@/service/api/module/login"
 import { localCache } from '@/utils/cache'
 import { showMsg } from '@/utils/showMsg'
 import router from "@/router"
@@ -58,7 +57,7 @@ const loginModule = {
         commit("changeUserInfo", userInfo.data || {})
 
         // 3. 登录成功
-        showMsg.success("登录成功")
+        // showMsg.success("登录成功")
         const localUserInfo = localCache.getCatch("userInfo")
         localUserInfo && commit("changeUserMenu", localUserInfo?.user?.menu)
 
@@ -68,11 +67,10 @@ const loginModule = {
         console.log(error)
       }
     },
-    initLoginState({ commit }) {
-      const userInfo = localCache.getCatch("userInfo")
-      
-      if (userInfo) {
-        commit("changeUserMenu", userInfo?.user?.menu || [])
+    initLoginState({ commit, state }) {
+      console.log(state.userInfo);
+      if (state.userInfo) {
+        commit("changeUserMenu", state.userInfo?.user?.menu)
       }
     }
   }

@@ -21,7 +21,7 @@ export const rules = {
   password: [
     {
       required: true,
-      message: "请输入密码",
+      message: "请输入密码asd",
       trigger: "blur"
     },
     {
@@ -30,7 +30,7 @@ export const rules = {
       trigger: "blur"
     }
   ],
-  password_confirm: [
+  confirmPwd: [
     {
       required: true,
       message: "请输入密码",
@@ -58,15 +58,40 @@ export const rules = {
       message: "请选择身份",
       trigger: "blur"
     }
+  ],
+  phone: [
+    {
+      required: true,
+      pattern: /^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/,
+      message: "请输入手机号",
+      trigger: "blur"
+    }
   ]
 }
 
 export const form = {
-  role: '',     // 身份
+  role: 'student',     // 身份(默认学生)
   userid: '',   // id
   username: '',     // 名字
   password: '',     // 密码
-  password_confirm: '',
+  confirmPwd: '',
   profession: '',   // 专业
-  class: ''         // 班级
+  class: '',         // 班级
+  phone: ''     // 手机号码
 }
+
+// 两次确认密码验证
+const validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'));
+  }
+};
+const validatePass2 = (rule, value, callback) => {
+    if (value === '') {
+        callback(new Error('请再次输入密码'));
+    } else if (value !== this.ruleForm.password) {
+        callback(new Error('两次输入密码不一致!'));
+    } else {
+        callback();
+    }
+};

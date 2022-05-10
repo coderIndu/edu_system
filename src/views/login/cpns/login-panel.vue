@@ -67,9 +67,7 @@ function showDialog() {
   isShowDialog.value = true
 }
 
-onMounted(() => {
-  showMsg.success('欢迎~awa~到来')
-})
+
 </script>
 
 <style scoped lang="less">

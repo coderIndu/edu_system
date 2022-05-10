@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="70%">
+  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="80%">
     <!-- 上传下载部分 -->
     <div class="header-edit" width="150px">
       <!-- 上传 -->
@@ -9,76 +9,131 @@
         :show-file-list="false"
         action=""
       >
-        <el-button type="primary" plain>
+        <el-button type="primary" plain class="btn">
           上传<el-icon class="el-icon--right" size="large"><Upload /></el-icon>
         </el-button>
       </el-upload>
       <!-- 下载 -->
-      <el-button type="success" plain>
-        批量下载<el-icon class="el-icon--right" size="large"><Download /></el-icon>
+      <el-button type="success" plain class="btn">
+        批量下载<el-icon class="el-icon--right" size="large" @click="download"><Download /></el-icon>
       </el-button>
     </div>
     <!-- 主体表单部分 -->
-    <el-table class="el-dialog__body" :data="tableData" stripe>
+    <el-table class="el-dialog__body" :data="tableData" stripe @select="select">
       <el-table-column type="selection" width="55" />
-      <el-table-column property="fileName" label="文件名" width="150" />
-      <el-table-column property="fileSize" label="文件大小" width="200" />
-      <el-table-column property="updateTime" label="更新事件" />
+      <el-table-column prop="name" label="文件名" />
+      <el-table-column prop="size" label="文件大小">
+        <template #default="scope">
+          {{$utils.formatSize(scope.row.size)}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="createData" label="更新时间" />
       <el-table-column  label="操作">
-        <el-button type="danger" size="small" plain>下载</el-button>
-        <el-button type="danger" size="small" plain>删除</el-button>
-        <el-button type="danger" size="small" plain>重命名</el-button>
+        <template #default="scope">
+          <el-button type="danger" size="small" plain @click="download(scope.row.path)">下载</el-button>
+          <el-button type="danger" size="small" plain @click="remove(scope.row.id)">删除</el-button>
+          <el-button type="danger" size="small" plain>重命名</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-dialog>
 </template>
 
 <script setup>
-import {ref, onMounted, inject} from 'vue'
+import {ref, onMounted, inject, reactive} from 'vue'
+import { useStore } from 'vuex'
 // 获取全局属性和方法
 const $http = inject('$http')
-const $apis = inject('$apis')
+const $utils = inject('$utils')
 const { showMsg } = inject('$utils')
-
+const store = useStore()
+const props = defineProps({
+  courseInfo: Object
+})
 // 设置emit
 const emit = defineEmits(['close'])
-const dialogTableVisible = ref(true)  // 是否显示
 
-const tableData = [{
-  fileName: "计算机导论.pdf",
-  fileSize: '1M',
-  updateTime: '2022-04-12'
-}]
+
+// 设置data
+const dialogTableVisible = ref(true)  // 是否显示
+const tableData = ref([])     // table数据
+const chooseItem = ref([])     // 选中的item
+/**
+ * 设置methods
+ */
 // 弹窗关闭事件
 const close = () => {
   dialogTableVisible.value = false
-  emit('close', '')
+  emit('close')
 }
 
-// 上传部分
-const handleChange = async (source) => {
-  console.log(source);
+// 选中
+const select = (select) => {
+  chooseItem.value = select
+}
+
+// 上传文件
+const handleChange = (source) => {
   // 1. 文件信息
-  let para = {
+  const para = {
     name: source.file.name,
     type: source.file.type,
     lastModifiedDate: source.file.lastModifiedDate,
     size: source.file.size,
-    file: source.file
+    file: source.file,
   }
+  const query = {
+    course_id: props.courseInfo.id ?? '',
+    class_id: props.courseInfo.class_id ?? ''
+  }
+
   // 2. 发送文件
-  const res = await $http.post($apis.uploadFile, para, 'formData')
-  console.log(res);
-  // 3. 接受响应
-  // if(res.data.status === 200) {  // 上传成功
-  //   showMsg.success('上传成功')
-  // } else {
-  //   showMsg.err('网络异常，请重试')
-  // }
+  $http.uploadFile($utils.parseParams(query), para).then(res => {
+    if(res.status === 200) {
+      showMsg.success("上传成功")
+      getFileList()
+    } else {
+      showMsg.err('上传失败')
+    }
+  })
 }
 
+// 获取文件列表
+const getFileList = () => {
+  const query = {
+    course_id: props.courseInfo.id,
+    class_id: props.courseInfo.class_id
+  }
+  $http.getFileList($utils.parseParams(query)).then(res => {
+    tableData.value = res.data.list
+  })
+}
+
+// 删除文件
+const remove = (id=null) => {
+  if(id !== null) chooseItem.value.push({id})
+  const ids = chooseItem.value.map(item => item.id)
+  $http.removeFiles({ids}).then(res => {
+    if(res.data.msg) {
+      showMsg.success("删除成功")
+      getFileList()
+    } else {
+      showMsg.err("删除失败")
+    }
+  })
+}
+
+// 下载文件
+const download = (path=null) => {
+  path !== null && (chooseItem.value.push({path}))
+  let paths = chooseItem.value.map(item => item.path)
+  // paths.forEach(item => {
+  //   console.log(item);
+  // })
+  location.href = 'file:///D:/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/edu_express/upload/0b93278d502964c1be0e0cd08.png'
+}
 onMounted(() => {
-  console.log('dialog')
+  getFileList()
 })
 </script>
 
@@ -91,5 +146,14 @@ onMounted(() => {
 .el-dialog__body{
   height: 50vh;
   overflow: auto;
+}
+
+.el-dialog {
+  left: 4%;
+}
+
+.btn {
+  // margin:0 10px;
+  margin-right: 10px;
 }
 </style>

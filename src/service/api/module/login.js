@@ -1,4 +1,4 @@
-import http from "../index"
+import http from "@/service/index"
 import { parseParams } from "@/service/request"
 import url from '@/common/helper.js'
 /**

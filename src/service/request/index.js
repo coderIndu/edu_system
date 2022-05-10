@@ -1,6 +1,5 @@
 import axios from "axios"
 import qs from 'qs'
-import { showMsg } from '@/utils/showMsg'
 import { localCache } from '@/utils/cache'
 
 class DyAxios {
@@ -9,34 +8,34 @@ class DyAxios {
     this.instance = axios.create(config)
 
     // 请求拦截(添加token等)
-    this.instance.interceptors.request.use((config) => {
+    this.instance.interceptors.request.use(req => {
       console.log('请求发出');
       // console.log(config);
       let contentType = ''
-      if (config.type == 'form') {
+      if (req.type == 'form') {
         contentType = 'application/x-www-form-urlencoded'
         console.info('--------------------------------- 请求拦截 ---------------------------------', config)
-      } else if (config.type == 'formData') {
+      } else if (req.type == 'formData') {
         contentType = 'multipart/form-data'
-      } else if (config.type == 'json') {
+      } else if (req.type == 'json') {
         contentType = 'application/json; charset=utf-8'
       }
 
       const token = localCache.getCatch('token') ?? ''
       if (token) {
-        config.headers = {
-          'authorization': token,
-          'Content-Type': contentType
+        req.headers = {
+          'Authorization': token,
+          'content-type': contentType
         }
       }
-      return config
+      return req
     }, err=>{})
 
     // 响应拦截(处理响应)
     this.instance.interceptors.response.use(response => { // 对响应数据做点什么
       return response
     }, err => {    // 对响应错误做点什么
-      return Promise.reject(err.response)
+      return Promise.resolve(err.response)
     })
   }
   /**

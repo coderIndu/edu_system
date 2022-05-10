@@ -4,7 +4,6 @@
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
       <span class="title" v-show="!roll">系统管理</span>
     </div>
-
     <el-menu
       :default-active="activeIndex"
       class="el-menu-vertical"
@@ -36,7 +35,6 @@ import { useRouter, onBeforeRouteUpdate } from 'vue-router'
 import navIcon from './nav-icon.vue';
 import { sessionCache } from "@/utils/cache"
 import { useMapStates } from "@/utils/useMapStore.js"
-import { getBreadcrumbList } from '@/utils/common/setBreadCrumb.js' // 设置面包屑
 
 
 // 定义模块数据

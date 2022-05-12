@@ -1,3 +1,4 @@
+const previewHost = 'http://114.132.229.173:8012/onlinePreview' 
 export default {
   // 用户相关
   login: "/users/login",  // 用户登录
@@ -14,7 +15,9 @@ export default {
   addCourse: '/course/add',            // 增加课程
   getCourseList: '/course/getlist',    // 获取课程列表
   removeCourse: 'course/delete',       // 删除课程
-  dropManyCourse: '/course/dropmany', // 删除多个课程
+  dropManyCourse: '/course/dropmany',  // 删除多个课程
   // 专业班级相关
-  getClassList: '/class/getlist',    // 获取班级列表
+  getClassList: '/class/getlist',      // 获取班级列表
+  // 文件预览
+  previewHost                          // 文件预览地址
 }

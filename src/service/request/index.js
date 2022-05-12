@@ -9,8 +9,6 @@ class DyAxios {
 
     // 请求拦截(添加token等)
     this.instance.interceptors.request.use(req => {
-      console.log('请求发出');
-      // console.log(config);
       let contentType = ''
       if (req.type == 'form') {
         contentType = 'application/x-www-form-urlencoded'
@@ -19,6 +17,8 @@ class DyAxios {
         contentType = 'multipart/form-data'
       } else if (req.type == 'json') {
         contentType = 'application/json; charset=utf-8'
+      } else if (req.type === 'blob') {
+        req.responseType = 'blob'
       }
 
       const token = localCache.getCatch('token') ?? ''
@@ -35,7 +35,7 @@ class DyAxios {
     this.instance.interceptors.response.use(response => { // 对响应数据做点什么
       return response
     }, err => {    // 对响应错误做点什么
-      return Promise.resolve(err.response)
+      return Promise.reject(err.response)
     })
   }
   /**
@@ -64,8 +64,8 @@ class DyAxios {
    * @param {*} data 
    * @returns 
    */
-  get(api, data) {
-    return this.request('get', api, data)
+  get(api, data, type) {
+    return this.request('get', api, data, type)
   }
 
   /**

@@ -62,6 +62,7 @@ const course_id = ref('')         // 课程id
 
 // methods部署
 function getData() {      // 获取课程列表
+  console.log(widget);
   $http.getCourseList(widget).then(res => {
     data.value = res.data
   })

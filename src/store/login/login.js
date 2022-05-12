@@ -38,14 +38,13 @@ const loginModule = {
   },
   actions: {
     // 登录
-    async accountLoginAction({ commit }, payload) {
+    async accountLoginAction({ commit, rootState }, payload) {
       // 1. 实现登录逻辑
       try {
-
-        const loginResult = await accountLoginRequest(payload) // 发送请求
         
+        const loginResult = await accountLoginRequest(payload) // 发送请求
+       
         const { token, userid } = loginResult['data']
-
         // 1.1 保存数据
         commit('changeUserToken', token)
         
@@ -54,23 +53,23 @@ const loginModule = {
 
         // 2. 请求用户信息
         const userInfo = await requestUserInfoById(userid)
-        commit("changeUserInfo", userInfo.data || {})
+        commit("changeUserInfo", userInfo.data.user)
+        // 2.1 设置rootState初始化userInfo  
+        commit('initState', {}, {root: true})
 
-        // 3. 登录成功
-        // showMsg.success("登录成功")
-        const localUserInfo = localCache.getCatch("userInfo")
-        localUserInfo && commit("changeUserMenu", localUserInfo?.user?.menu)
-
+        // 3. 登录成功,注册动态路由
+        commit("changeUserMenu", userInfo.data.user.menu)
+        
         router.push('/main')
       } catch (error) {
-        showMsg.err('账号/密码错误，请检查')
-        console.log(error)
+        const msg = error.data.errors[0].msg
+        showMsg.err(msg)
+        console.log(msg)
       }
     },
     initLoginState({ commit, state }) {
-      console.log(state.userInfo);
       if (state.userInfo) {
-        commit("changeUserMenu", state.userInfo?.user?.menu)
+        commit("changeUserMenu", state.userInfo.menu)
       }
     }
   }

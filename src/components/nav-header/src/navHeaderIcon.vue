@@ -6,10 +6,10 @@
         class="headImg"
         shape="square"
         size="small"
-        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+        :src="userInfo?.image || 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'"
         fit="cover"
       ></el-avatar>
-      <span class="username">{{ username }}</span>
+      <span class="username">{{ userInfo.username }}</span>
     </span>
     <template #dropdown>
       <el-dropdown-menu>
@@ -42,7 +42,7 @@ import { localCache, sessionCache } from '@/utils/cache.js'
 const store = useStore()
 const router = useRouter()
 
-const username = store.state.username  // 用户名
+const userInfo = ref(store.state.userInfo) // 用户名
 
 // 退出登录
 function quit() { 

@@ -29,4 +29,16 @@ module.exports = {
       }),
     ]
   },
+  // devServer: {
+  //   host: '0.0.0.0',
+  //   port: 8081,
+  //   // open: true,
+  //   // proxy: {
+  //   //   '/': {
+  //   //     target: 'https://127.0.0.1:5000/api',
+  //   //     ws: true,
+  //   //     changeOrigin:true,//允许跨域
+  //   //   }
+  //   // }
+  // }
 }

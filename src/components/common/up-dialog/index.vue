@@ -14,12 +14,12 @@
         </el-button>
       </el-upload>
       <!-- 下载 -->
-      <el-button type="success" plain class="btn">
-        批量下载<el-icon class="el-icon--right" size="large" @click="download"><Download /></el-icon>
+      <el-button type="success" plain class="btn" @click="download(chooseItem)">
+        批量下载<el-icon class="el-icon--right" size="large"><Download /></el-icon>
       </el-button>
     </div>
     <!-- 主体表单部分 -->
-    <el-table class="el-dialog__body" :data="tableData" stripe @select="select">
+    <el-table class="el-dialog__body" :data="tableData" stripe @select="select" ref="tableRef">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="name" label="文件名" />
       <el-table-column prop="size" label="文件大小">
@@ -30,9 +30,9 @@
       <el-table-column prop="createData" label="更新时间" />
       <el-table-column  label="操作">
         <template #default="scope">
-          <el-button type="danger" size="small" plain @click="download(scope.row.path)">下载</el-button>
+          <el-button type="danger" size="small" plain @click="download([scope.row])">下载</el-button>
+          <el-button type="danger" size="small" plain @click="preview(scope.row)">预览</el-button>
           <el-button type="danger" size="small" plain @click="remove(scope.row.id)">删除</el-button>
-          <el-button type="danger" size="small" plain>重命名</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,11 +40,14 @@
 </template>
 
 <script setup>
-import {ref, onMounted, inject, reactive} from 'vue'
+import {ref, onMounted, watch, inject} from 'vue'
 import { useStore } from 'vuex'
+import { BASE_URL } from '@/service/request/config';
+
 // 获取全局属性和方法
 const $http = inject('$http')
 const $utils = inject('$utils')
+// const $apis = inject('$apis')
 const { showMsg } = inject('$utils')
 const store = useStore()
 const props = defineProps({
@@ -56,8 +59,9 @@ const emit = defineEmits(['close'])
 
 // 设置data
 const dialogTableVisible = ref(true)  // 是否显示
-const tableData = ref([])     // table数据
-const chooseItem = ref([])     // 选中的item
+const tableData = ref([])       // table数据
+const chooseItem = ref([])      // 选中的item
+const tableRef = ref(null)      // table的ref
 /**
  * 设置methods
  */
@@ -124,17 +128,25 @@ const remove = (id=null) => {
 }
 
 // 下载文件
-const download = (path=null) => {
-  path !== null && (chooseItem.value.push({path}))
-  let paths = chooseItem.value.map(item => item.path)
-  // paths.forEach(item => {
-  //   console.log(item);
-  // })
-  location.href = 'file:///D:/%E6%AF%95%E4%B8%9A%E8%AE%BE%E8%AE%A1/edu_express/upload/0b93278d502964c1be0e0cd08.png'
+const download = (select) => {
+  select.forEach(item => {
+    $utils.downloadFile(item.path, item.name)
+  })
+  chooseItem.value = []
+  tableRef.value.clearSelection()
 }
+// 文件重命名
+const preview = (select) => {
+  const url = BASE_URL+select.path
+  $utils.priviewFile(url)
+}
+
+
 onMounted(() => {
   getFileList()
 })
+
+
 </script>
 
 <style lang="less" scoped>

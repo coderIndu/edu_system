@@ -6,7 +6,7 @@ import http from '@/service'
  * @param {Object} data 文件数据
  * @returns 
  */
-export  function uploadFile(query, data) {
+export  function uploadFile(data, query="") {
   return http.post(url.uploadFile + `?${query}`, data, 'formData')
 }
 

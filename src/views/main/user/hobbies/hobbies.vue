@@ -1,10 +1,11 @@
 <template>
   <div class="hobbies">
-    <h2>hobbies</h2>
+    <Socket></Socket>
   </div>
 </template>
 
 <script setup>
+import Socket from '@/components/common/socket.vue';
 
 </script>
 

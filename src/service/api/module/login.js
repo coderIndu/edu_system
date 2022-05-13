@@ -1,6 +1,7 @@
 import http from "@/service/index"
 import { parseParams } from "@/service/request"
 import url from '@/common/helper.js'
+
 /**
  * 用户登录
  * @param {Object} account 用户对象
@@ -27,4 +28,9 @@ export function requestUserInfoById(userid) {
 export function onRegister(form) {
   const data = {user: form}
   return http.post(url.register, data)
+}
+
+
+export function onUpdatedUser(data) {
+  return http.post(url.updateUser, data)
 }

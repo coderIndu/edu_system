@@ -38,7 +38,7 @@ const loginModule = {
   },
   actions: {
     // 登录
-    async accountLoginAction({ commit, rootState }, payload) {
+    async accountLoginAction({ commit, dispatch, state }, payload) {
       // 1. 实现登录逻辑
       try {
         
@@ -52,25 +52,30 @@ const loginModule = {
         localCache.setCatch('expirationTime', new Date().getTime() + 60*60*1000)
 
         // 2. 请求用户信息
-        const userInfo = await requestUserInfoById(userid)
-        commit("changeUserInfo", userInfo.data.user)
+        await dispatch("updateUserInfo", userid)
+        // const userInfo = await requestUserInfoById(userid)
+        // commit("changeUserInfo", userInfo.data.user)
         // 2.1 设置rootState初始化userInfo  
         commit('initState', {}, {root: true})
 
         // 3. 登录成功,注册动态路由
-        commit("changeUserMenu", userInfo.data.user.menu)
+        commit("changeUserMenu", state.userInfo.menu)
         
         router.push('/main')
       } catch (error) {
-        const msg = error.data.errors[0].msg
+        const msg = error.data?.errors[0].msg
         showMsg.err(msg)
-        console.log(msg)
+        console.log(error)
       }
     },
     initLoginState({ commit, state }) {
       if (state.userInfo) {
         commit("changeUserMenu", state.userInfo.menu)
       }
+    },
+    async updateUserInfo({ commit }, userid) {
+      const userInfo = await requestUserInfoById(userid)
+      commit("changeUserInfo", userInfo.data.user)
     }
   }
 }

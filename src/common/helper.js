@@ -4,7 +4,7 @@ export default {
   login: "/users/login",  // 用户登录
   getInfo: "/user",        // 获取用户信息
   register: '/users/register', // 用户注册
-
+  updateUser: '/user/update',  // 用户更新
   // 文件相关
   uploadFile: '/file/upload',   // 上传文件
   downFile: '/file/download',   // 下载文件

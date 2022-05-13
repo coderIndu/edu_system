@@ -92,7 +92,7 @@ const handleChange = (source) => {
   }
 
   // 2. 发送文件
-  $http.uploadFile($utils.parseParams(query), para).then(res => {
+  $http.uploadFile(para, $utils.parseParams(query)).then(res => {
     if(res.status === 200) {
       showMsg.success("上传成功")
       getFileList()

@@ -10,13 +10,17 @@ export const form = {
   className: ''
 }
 export const formArr = [
-  {
-    value: "role",
-    label: "身份" 
-  },
+  // {
+  //   value: "role",
+  //   label: "身份" 
+  // },
   {
     value: "username",
     label: "名字" 
+  },
+  {
+    value: "userid",
+    label: "学号" 
   },
   {
     value: "profession",
@@ -30,4 +34,8 @@ export const formArr = [
     value: "phone",
     label: "手机号" 
   },
+  {
+    value: "updateDate",
+    label: "创建日期"
+  }
 ]

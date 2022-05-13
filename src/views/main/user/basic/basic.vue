@@ -1,18 +1,25 @@
 <template>
 
   <el-card :body-style="{ padding: '0px' }">
-    <img class="head-icon" src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg">
-    
+    <el-upload :style="{'pointer-events': isReadonly ? 'none':'' }" class="head-icon" action="" :http-request="uploadIcon" :show-file-list="false">
+      <img v-if="formData.image" :src="BASE_URL + formData.image" class="avatar" />
+      <el-icon v-else class="avatar-uploader-icon">
+        <Plus />
+      </el-icon>
+    </el-upload>
+
     <div style="padding: 14px;">
       <!-- 表单 -->
-      <el-form :model="ruleForm" :rules="register_user" label-width="80px" ref="formRef">
-        <el-form-item class="form-item" v-for="(item, index) in formArr" :key="index" :label="item.label" :prop="item.value">
-          <el-input v-model="formData[item.value]"></el-input>
+      <el-form :model="formData" :rules="isReadonly ? {} : register_user" label-width="80px" ref="formRef">
+        <el-form-item class="form-item" v-for="(item, index) in formArr" :key="index" :label="item.label"
+          :prop="item.value">
+          <el-input :disabled="isReadonly" v-model="formData[item.value]"></el-input>
         </el-form-item>
         <!-- 操作部分 -->
         <el-form-item size="large">
-          <el-button type="primary" @click="onSubmit" size="default">修改</el-button>
-          <el-button type="danger" size="default">取消</el-button>
+          <el-button v-if="isReadonly" type="primary" size="default" @click="isReadonly = false">修改</el-button>
+          <el-button v-else type="primary" size="default" @click="commit">确认</el-button>
+          <el-button :disabled="isReadonly" type="danger" size="default" @click="isReadonly = true">取消</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -20,23 +27,58 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive, inject } from 'vue'
 import { register_user } from '@/common/rules'    // 表单验证配置
-import { form, formArr } from './config'                   // form表单配置
+import { formArr } from './config'          // form表单配置
+import { useStore } from 'vuex'
+import { BASE_URL } from '@/service/request/config'
+
 
 // 设置公共数据
-
-
+const store = useStore()
+const $http = inject("$http")
+const $utils = inject('$utils')
+const { showMsg } = $utils
+ 
 // 设置data数据
-const formData = reactive(form)
+const userInfo = reactive(store.state.userInfo)
+const formData = reactive(userInfo)
 const formRef = ref(null)
+const isReadonly = ref(true)
 
 // methods部署
+const uploadIcon = (source) => {    // 上传头像
+  const data = {
+    name: source.file.name,
+    type: source.file.type,
+    lastModifiedDate: source.file.lastModifiedDate,
+    size: source.file.size,
+    file: source.file,
+  }
+  
+  $http.uploadFile(data).then(res => {
+    formData.image = res.data.path
+  }).catch(err => {
+    console.log(err);
+  })
 
+}
 
+// 提交数据
+const commit = () => {
+  $http.onUpdatedUser(formData).then(res => {
+    if(res.data.modifiedCount) {
+      showMsg.success('更新成功！')
+      store.dispatch('login/updateUserInfo', formData.userid)
+      isReadonly.value = true
+    }
+  }).catch(err => {
+    console.log(err);
+  })
+}
 // 组件挂载
 onMounted(() => {
-
+  // console.log(userInfo);
 })
 
 </script>
@@ -58,11 +100,26 @@ onMounted(() => {
   height: 100px;
   border-radius: 5px;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  background-color: #f6f6f6;
+  justify-content: center;
+
+  /deep/ .el-upload {
+    width: 100%;
+    height: 100%;
+
+    .avatar-uploader-icon, .avatar {
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .form-item {
   margin: 40px 0 !important;
 }
+
 .form-item:first-child {
   margin: 0 !important;
 }

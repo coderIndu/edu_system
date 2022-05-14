@@ -6,8 +6,10 @@
 
 </script>
 
-<style lang="less" scoped>
-.app {
-  height: 100%;
+<style lang="less" >
+#app {
+  overflow: hidden;
+  // width: 100vw;
+  // height: 100vh;
 }
 </style>

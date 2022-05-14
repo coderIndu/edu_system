@@ -6,7 +6,7 @@
         class="headImg"
         shape="square"
         size="small"
-        :src="BASE_URL + userInfo?.image || 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'"
+        :src="userInfo?.image || 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'"
         fit="cover"
       ></el-avatar>
       <span class="username">{{ userInfo.username }}</span>
@@ -38,7 +38,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { localCache, sessionCache } from '@/utils/cache.js'
-import { BASE_URL } from '@/service/request/config'
+
 
 const store = useStore()
 const router = useRouter()

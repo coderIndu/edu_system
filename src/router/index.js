@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHistory, createWebHashHistory } from "vue-router"
 import { localCache, sessionCache } from '../utils/cache'
 import { firstMenu } from '../utils/map-menus'
 import { showMsg } from '@/utils/showMsg'

@@ -4,6 +4,12 @@
  import http from "@/service/index"
  import url from '@/common/helper.js'
 
- export function getClassList(query) {
-   return http.get(`${url.getClassList}?profession=${query}`)
+
+ /**
+  * 获取专业对应的班级列表
+  * @param {*} profession 专业名称
+  * @returns 
+  */
+ export function getClassList(profession) {
+   return http.get(`${url.getClassList}?profession=${profession}`)
  }

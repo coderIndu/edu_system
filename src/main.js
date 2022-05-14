@@ -11,8 +11,8 @@ import 'vue3-video-play/dist/style.css'					// 引入视频播放器css
 import request from '@/service/api'
 import apis from '@/common/helper'        			// 接口
 import utils from '@/utils'                			// utils下面的工具函数
+import { validation } from '@/utils/common/custom'			// 自定义指令
 
-// console.log(axios);
 const app = createApp(App)
 
 // 全局注册element-icon
@@ -24,6 +24,8 @@ app.provide("$apis", apis)
 app.provide("$http", request)
 app.provide("$utils", utils)
 
+// 注册自定义指令
+validation(app)
 
 // 初始化token和menus
 store.state.username && store.dispatch("login/initLoginState", "")

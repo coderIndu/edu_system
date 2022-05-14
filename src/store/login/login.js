@@ -63,7 +63,7 @@ const loginModule = {
         
         router.push('/main')
       } catch (error) {
-        const msg = error.data?.errors[0].msg
+        const msg = error.data?.errors[0]?.msg
         showMsg.err(msg)
         console.log(error)
       }

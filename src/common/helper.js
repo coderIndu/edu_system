@@ -19,5 +19,10 @@ export default {
   // 专业班级相关
   getClassList: '/class/getlist',      // 获取班级列表
   // 文件预览
-  previewHost                          // 文件预览地址
+  previewHost,                         // 文件预览地址
+  // 公告相关
+  addNotice: '/notice/addOne',         // 添加公告
+  getNoticeList: '/notice/getlist',    // 获取公告列表
+  delNotice: '/notice/delOne',         // 删除公告
 }
+

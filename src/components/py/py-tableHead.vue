@@ -1,6 +1,6 @@
 <template>
-    <el-button type="success" @click="emits('itemClick')">{{item}}</el-button>
-    <el-button type="danger" @click="emits('editClick')">{{edit}}</el-button>
+    <el-button v-if="item" type="success" @click="emits('itemClick')">{{item}}</el-button>
+    <el-button v-if="edit" type="danger" @click="emits('editClick')">{{edit}}</el-button>
 </template>
 
 <script setup>

@@ -42,7 +42,6 @@
 <script setup>
 import {ref, onMounted, watch, inject} from 'vue'
 import { useStore } from 'vuex'
-import { BASE_URL } from '@/service/request/config';
 
 // 获取全局属性和方法
 const $http = inject('$http')
@@ -137,7 +136,7 @@ const download = (select) => {
 }
 // 文件重命名
 const preview = (select) => {
-  const url = BASE_URL+select.path
+  const url = select.path
   $utils.priviewFile(url)
 }
 

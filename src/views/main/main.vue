@@ -39,12 +39,12 @@ onMounted(() => {
 
 <style scoped lang="less">
 .el-container {
+  height: 100%;
+  overflow: auto;
   .el-header {
     background-color: #f6f6f6;
     color: var(--el-text-color-primary);
     height: 40px;
-    // text-align: center;
-    // line-height: 30px;
   }
 
   .el-aside {

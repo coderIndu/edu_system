@@ -9,9 +9,9 @@
         <!-- 聊天列表 -->
         <div class="window-container-content">
             <div :class="[userInfo.userid === user.userid ? 'content-item-self': 'content-item']" v-for="(user,index) in chat_list" :key="index">
-              <el-image v-if="user.image && user.userid!==userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="BASE_URL + user.image" :initial-index="4" fit="cover" />
+              <el-image v-if="user.image && user.userid!==userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="user.image" :initial-index="4" fit="cover" />
               <span class="content-item-name">{{user.msg}}</span>
-              <el-image v-if="user.image && user.userid===userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="BASE_URL + user.image" :initial-index="4" fit="cover" />
+              <el-image v-if="user.image && user.userid===userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="user.image" :initial-index="4" fit="cover" />
             </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
     <!-- 人员列表 -->
     <div class="user-list">
       <div class="user-item" v-for="(item, index) in userList" :key="index">
-        <el-image style="width: 30px; height: 30px; border-radius: 50%;" :src="BASE_URL + item.image" :initial-index="4" fit="cover" />
+        <el-image style="width: 30px; height: 30px; border-radius: 50%;" :src="item.image"/>
         <div class="user-name">{{ item.username }}</div>
       </div>
     </div>
@@ -44,7 +44,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
 import Emoji from '@/components/common/emojs.vue'
-import { BASE_URL } from '@/service/request/config';
+
 // 设置公共数据
 const store = useStore()
 const socket = window.io.connect('http://114.132.229.173:5000')

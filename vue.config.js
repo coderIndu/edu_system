@@ -29,16 +29,27 @@ module.exports = {
       }),
     ]
   },
-  // devServer: {
-  //   host: '0.0.0.0',
-  //   port: 8081,
-  //   // open: true,
-  //   // proxy: {
-  //   //   '/': {
-  //   //     target: 'https://127.0.0.1:5000/api',
-  //   //     ws: true,
-  //   //     changeOrigin:true,//允许跨域
-  //   //   }
-  //   // }
-  // }
+  devServer: {
+    host: '127.0.0.1',
+    port: 8080,
+    // open: true,
+    proxy: {
+      '/api': {         // axios请求跨域
+        target: 'http://114.132.229.173:5000/api',
+        ws: true,
+        changeOrigin:true,//允许跨域
+        pathRewrite: {
+          '/api': ""
+        }
+      },
+      '/resource': {    // 请求资源跨域
+        target: 'http://114.132.229.173:5000/api/resource/',
+        ws: true,
+        changeOrigin:true,//允许跨域
+        pathRewrite: {
+          '/resource': ""
+        }
+      }
+    }
+  }
 }

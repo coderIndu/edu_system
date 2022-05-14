@@ -2,7 +2,7 @@
 
   <el-card :body-style="{ padding: '0px' }">
     <el-upload :style="{'pointer-events': isReadonly ? 'none':'' }" class="head-icon" action="" :http-request="uploadIcon" :show-file-list="false">
-      <img v-if="formData.image" :src="BASE_URL + formData.image" class="avatar" />
+      <img v-if="formData.image" :src="formData.image" class="avatar" />
       <el-icon v-else class="avatar-uploader-icon">
         <Plus />
       </el-icon>
@@ -31,7 +31,6 @@ import { ref, onMounted, reactive, inject } from 'vue'
 import { register_user } from '@/common/rules'    // 表单验证配置
 import { formArr } from './config'          // form表单配置
 import { useStore } from 'vuex'
-import { BASE_URL } from '@/service/request/config'
 
 
 // 设置公共数据

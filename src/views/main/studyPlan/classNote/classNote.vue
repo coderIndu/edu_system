@@ -33,6 +33,7 @@
     </el-table-column>
   </el-table>
   <PyPagination :total="widget.total" :limit="widget.limit" @currentChange="currentChange"></PyPagination>
+  <!-- 编辑信息弹窗 -->
   <pyDialog title="编辑信息" v-if="showDialog" @close="showDialog = false" @confirm="confirm">
     <pyForm ref="pyFormRef" :data="diaFormArr" :rules="register_user" :initData="diaForm"></pyForm>
   </pyDialog>
@@ -122,7 +123,9 @@ const confirm = () => {             // 提交表单数据，更新学生信息
     $http.onUpdatedUser(data).then(res => {
       if (res.data.modifiedCount) {
         showMsg.success('修改成功')
+        showDialog.value = false
         getData()
+
       }
     })
   }, () => {
@@ -138,7 +141,7 @@ const currentChange = (val) => {    // 分页选择
 
 const findData = (value) => {    // 查询学生
   widget.search = value
-  $utils.debounce(getData, 2000)()
+  $utils.debounce(getData, 1500)()
 }
 
 const removeItem = (select) => { // 删除学生

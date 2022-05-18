@@ -29,10 +29,10 @@
 </template>
 
 <script setup>
-import { defineProps, ref  } from 'vue'
+import { defineProps, onMounted, ref  } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
-import { sessionCache } from "@/utils/cache"
+import { localCache, sessionCache } from "@/utils/cache"
 import { useMapStates } from "@/utils/useMapStore.js"
 import pyIconVue from '@/components/py/py-icon.vue';
 
@@ -50,7 +50,7 @@ const store = useStore()
 const loginStates = useMapStates(['menus'], 'login') // login
 
 // 定义组件数据
-const usermenu = loginStates.menus    // 路由菜单
+const usermenu =  localCache.getCatch('currentMenu')
 
 const activeIndex = ref(sessionCache.getCatch('activeIndex') || '0-0')  // 默认显示的菜单路由
 
@@ -67,12 +67,9 @@ const handleMenuItemClick = (item) => {
   })
 }
 
-// 组件内路由导航守卫
-// onBeforeRouteUpdate((to, from) => {  // 组件路由改变后触发
-// console.log(2333, to.fullPath);
-//   // 设置面包屑
-//   store.commit("header/setBreadcrumb", to.fullPath)
-// }) 
+onMounted(() => {
+  // console.log(233333333333);
+})
 
 </script>
 

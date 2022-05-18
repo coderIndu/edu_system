@@ -14,7 +14,6 @@ export default {
     setBreadcrumb(state, path) {
       const findArr = getBreadcrumbList(path)
       state.breadcrumb = findArr
-      console.log(2333, findArr);
       localCache.setCatch('breadcrumb', findArr)
     }
   }

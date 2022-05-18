@@ -34,6 +34,7 @@ const loginModule = {
       routes.forEach(route => {
         router.addRoute('main', route) 
       })
+      router.options.routes.push(...routes)
     }
   },
   actions: {

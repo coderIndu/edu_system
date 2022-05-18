@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, inject, provide } from "vue";
+import { ref, onMounted, provide } from "vue";
 import pyDialogVue from "@/components/py/py-dialog.vue";
 import videoListVue from "@/components/todayClass/videoList.vue";
 

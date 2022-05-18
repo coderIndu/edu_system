@@ -43,8 +43,6 @@ const courseClock = () => {     // 课程打卡
 
 // 组件挂载
 onMounted(() => {
-  console.log(course);
-  console.log(course.card_list[0], userInfo.userid);
   isClock.value =  course.card_list.includes(userInfo.userid) // 是否打过卡
 })
 

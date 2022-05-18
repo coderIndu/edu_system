@@ -69,8 +69,8 @@
         </el-col>
         <!-- 班级 -->
         <el-col :span="12">
-          <el-form-item label="班级" prop="class">
-            <el-input v-model="userForm.class" />
+          <el-form-item label="班级" prop="className">
+            <el-input v-model="userForm.className" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -123,13 +123,10 @@ const submitForm = function (formObj) {
      if (valid) {
       //  开始注册
       onRegister(formObj).then(res => {
-        if(res.status === 200) {
-          showMsg.success('注册成功!')
-          emit('close')
-        } else {
-          let errMsg = res.data?.errors[0].msg ?? '注册失败!'
-          showMsg.err(errMsg)
-        }
+        showMsg.success('注册成功!')
+        emit('close')
+      }).catch(err => {
+        showMsg.err(err)
       })
     } else {
       console.log('error submit!', fields)

@@ -2,6 +2,9 @@ import { createRouter, createWebHistory, createWebHashHistory } from "vue-router
 import { localCache, sessionCache } from '../utils/cache'
 import { firstMenu } from '../utils/map-menus'
 import { showMsg } from '@/utils/showMsg'
+import store from '../store'
+
+
 const routes = [
   {
     path: "/",
@@ -46,13 +49,16 @@ router.beforeEach((to, from) => {
     } else if(!token){   // 没有token首次登录
       return '/login'
     }
-   
+
+    // 设置面板屑
+    store.commit('header/setBreadcrumb', to.path)
   }
-  
+
   if (to.path === '/main') {
     // 动态添加路由
     return firstMenu.path
-  }
+  } 
+  
 })
 
 

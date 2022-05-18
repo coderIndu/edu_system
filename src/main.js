@@ -5,6 +5,7 @@ import store from "./store"
 import "normalize.css"
 import "./assets/css/index.less"
 import 'element-plus/theme-chalk/index.css'
+import * as echarts from 'echarts'							// echarts
 import * as ElIcons from '@element-plus/icons'  // icon
 import vue3videoPlay from 'vue3-video-play' 		// 引入视频播放器组件
 import 'vue3-video-play/dist/style.css'					// 引入视频播放器css
@@ -23,6 +24,7 @@ for (const name in ElIcons){
 app.provide("$apis", apis)
 app.provide("$http", request)
 app.provide("$utils", utils)
+app.provide('$echarts', echarts)
 
 // 注册自定义指令
 validation(app)

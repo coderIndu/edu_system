@@ -1,6 +1,8 @@
 <template>
-    <el-button v-if="item" type="success" @click="emits('itemClick')">{{item}}</el-button>
-    <el-button v-if="edit" type="danger" @click="emits('editClick')">{{edit}}</el-button>
+  <div>
+    <el-button v-if="item" type="success" @click="emits('itemClick')">{{ item }}</el-button>
+    <el-button v-if="edit" type="danger" @click="emits('editClick')">{{ edit }}</el-button>
+  </div>
 </template>
 
 <script setup>
@@ -25,5 +27,4 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

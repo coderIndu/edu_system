@@ -14,7 +14,7 @@
     >
       <el-sub-menu :index="index + ''" v-for="(item, index) in usermenu" :key="index">
         <template #title>
-          <navIcon :icon="item.icon" />
+          <pyIconVue :icon="item.icon"></pyIconVue>
           <span>{{ item.name }}</span>
         </template>
         <el-menu-item
@@ -32,10 +32,9 @@
 import { defineProps, ref  } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, onBeforeRouteUpdate } from 'vue-router'
-import navIcon from './nav-icon.vue';
 import { sessionCache } from "@/utils/cache"
 import { useMapStates } from "@/utils/useMapStore.js"
-
+import pyIconVue from '@/components/py/py-icon.vue';
 
 // 定义模块数据
 const props = defineProps({
@@ -52,6 +51,7 @@ const loginStates = useMapStates(['menus'], 'login') // login
 
 // 定义组件数据
 const usermenu = loginStates.menus    // 路由菜单
+
 const activeIndex = ref(sessionCache.getCatch('activeIndex') || '0-0')  // 默认显示的菜单路由
 
 
@@ -68,10 +68,11 @@ const handleMenuItemClick = (item) => {
 }
 
 // 组件内路由导航守卫
-onBeforeRouteUpdate((to, from) => {  // 组件路由改变后触发
-  // 设置面包屑
-  store.commit("header/setBreadcrumb", to.fullPath)
-}) 
+// onBeforeRouteUpdate((to, from) => {  // 组件路由改变后触发
+// console.log(2333, to.fullPath);
+//   // 设置面包屑
+//   store.commit("header/setBreadcrumb", to.fullPath)
+// }) 
 
 </script>
 

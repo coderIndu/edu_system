@@ -55,12 +55,12 @@ const props = defineProps({
 // 设置emit
 const emit = defineEmits(['close'])
 
-
 // 设置data
 const dialogTableVisible = ref(true)  // 是否显示
 const tableData = ref([])       // table数据
 const chooseItem = ref([])      // 选中的item
 const tableRef = ref(null)      // table的ref
+
 /**
  * 设置methods
  */
@@ -78,26 +78,25 @@ const select = (select) => {
 // 上传文件
 const handleChange = (source) => {
   // 1. 文件信息
-  const para = {
+  const data = {
     name: source.file.name,
-    type: source.file.type,
+    mimetype: source.file.type,
     lastModifiedDate: source.file.lastModifiedDate,
     size: source.file.size,
     file: source.file,
+    course_id: props.courseInfo.id,
+    class_id: props.courseInfo.class_id,
+    create_id: store.state.userInfo.userid
   }
-  const query = {
-    course_id: props.courseInfo.id ?? '',
-    class_id: props.courseInfo.class_id ?? ''
-  }
-
+  // source.file.splice(1, 1024*1024)
   // 2. 发送文件
-  $http.uploadFile(para, $utils.parseParams(query)).then(res => {
+  $http.uploadFile(data).then(res => {
     if(res.status === 200) {
       showMsg.success("上传成功")
       getFileList()
-    } else {
+    } 
+  }).catch(err => {
       showMsg.err('上传失败')
-    }
   })
 }
 
@@ -134,7 +133,7 @@ const download = (select) => {
   chooseItem.value = []
   tableRef.value.clearSelection()
 }
-// 文件重命名
+// 文件预览
 const preview = (select) => {
   const url = select.path
   $utils.priviewFile(url)

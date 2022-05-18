@@ -3,7 +3,7 @@
     <el-form :model="formData">
       <el-row>
         <!-- 选择班级 -->
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item label="班级" width="100%">
             <el-select placeholder="选择班级" v-model="formData.class_id" clearable ref="selectRef">
               <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.value"></el-option>
@@ -11,9 +11,9 @@
           </el-form-item>
         </el-col>
         <!-- 课程名称 -->
-        <el-col :span="12"> 
+        <el-col :span="24"> 
           <el-form-item label="课程名称">
-            <el-input v-model="formData.course_name"></el-input>
+            <el-input v-model="formData.course_name" style="width: 200px;"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -29,7 +29,6 @@
 </template>
 
 <script setup>
-import { form } from '@/views/login/config/account-config';
 import { ref, onMounted, inject, reactive } from 'vue'
 import { useStore } from 'vuex'
 
@@ -43,7 +42,7 @@ const emits = defineEmits(['close', 'confirm'])
 const selectRef = ref(null)
 const dialogFormVisible = ref(true)             // 是否显示弹窗
 const options = ref([])                         // 班级下拉框
-const { profession, userid } = store.state.userInfo     // 用户专业信息
+const { profession, userid, username } = store.state.userInfo     // 用户专业信息
 const formData = reactive({
   course_name: "",
   class_id: ""
@@ -63,11 +62,12 @@ function getData() {       // 获取班级列表
 }
 
 
-function confirm() {       // 提交表单
+function confirm() {       // 提交表单, 创建课程
   const data = {
     id: new Date().getTime(),
     name: formData.course_name,
     create_id: userid,
+    create_name: username,
     class_name: selectRef.value.selectedLabel,
     class_id: formData.class_id
   }

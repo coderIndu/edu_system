@@ -5,5 +5,6 @@ export function el_notice(title, message, type) {
     title,
     message,
     type,
+    duration: 2000
   })
 }

@@ -76,7 +76,7 @@ export const form = {
   password: '',     // 密码
   confirmPwd: '',
   profession: '',   // 专业
-  class: '',         // 班级
+  className: '',         // 班级
   phone: ''     // 手机号码
 }
 

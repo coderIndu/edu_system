@@ -30,7 +30,29 @@ export function onRegister(form) {
   return http.post(url.register, data)
 }
 
-
+/**
+ * 更新用户数据
+ * @param {*} data 
+ * @returns 
+ */
 export function onUpdatedUser(data) {
   return http.post(url.updateUser, data)
+}
+
+/**
+ * 获取用户列表
+ * @param {*} query 
+ * @returns 
+ */
+export function getUserList(query) {
+  return http.get(url.getUserList+ `?${parseParams(query)}`)
+}
+
+/**
+ * 删除用户
+ * @param {Array} ids 
+ * @returns 
+ */
+export function delUser(ids) {
+  return http.post(url.delUser, ids)
 }

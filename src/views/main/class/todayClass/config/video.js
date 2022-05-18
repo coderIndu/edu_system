@@ -1,6 +1,6 @@
 export default {
-  // width: "100%", //播放器高度
-  // height: "260px", //播放器高度
+  width: "100%", //播放器高度
+  height: "400px", //播放器高度
   color: "#409eff", //主题色
   speed: false, //关闭进度条拖动
   title: '', //视频名称

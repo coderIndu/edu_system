@@ -27,3 +27,12 @@ export const delNotice = (query) => {
 export const getNoticeList = (query) => {
   return http.get(apis.getNoticeList + `?${utils.parseParams(query)}`)
 }
+
+/**
+ * 编辑公告
+ * @param {*} data id, notice
+ * @returns 
+ */
+export const editNotice = (data) => {
+  return http.post(apis.editNotice, data)
+}

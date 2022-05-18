@@ -86,7 +86,7 @@ export const register_user = {
     {
       required: true,
       pattern: /^0{0,1}(13[0-9]|15[7-9]|153|156|18[7-9])[0-9]{8}$/,
-      message: "请输入手机号",
+      message: "手机格式不正确",
       trigger: "blur"
     }
   ],

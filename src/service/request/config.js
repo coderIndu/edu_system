@@ -1,5 +1,5 @@
 let BASE_URL = ""
-const TIME_OUT = 10000
+const TIME_OUT = 1000 * 60
 const PRIVIEW_URL = 'http://114.132.229.173:5000/api'
 
 if (process.env.NODE_ENV === "development") {

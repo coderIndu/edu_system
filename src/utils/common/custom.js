@@ -14,3 +14,30 @@ export function validation(app) {
     }
   })
 }
+
+/**
+ * 自动滚动条到底部
+ * @param {*} el 
+ */
+export function scrollAuto(el) {
+  el.scrollTop = el.scrollHeight
+}
+
+/**
+ * 防抖函数
+ * @param {*} fn 执行函数
+ * @param {*} delay 延迟
+ * @returns 
+ */
+ let timer = null
+export function debounce(fn, delay=1000) {
+  return (...args) => {
+    if(timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(() => {
+      // console.log(23333);
+      fn.apply(this, args)
+    }, delay);
+  }
+}

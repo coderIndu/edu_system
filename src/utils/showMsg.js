@@ -20,9 +20,9 @@ export const showMsg = {
       ...init
     })
   },
-  message(msg) {
+  info(msg) {
     ElMessage({
-      type: 'message',
+      type: 'info',
       message: msg,
       ...init
     })

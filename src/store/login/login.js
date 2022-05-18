@@ -3,7 +3,7 @@ import { accountLoginRequest, requestUserInfoById } from "@/service/api/module/l
 import { localCache } from '@/utils/cache'
 import { showMsg } from '@/utils/showMsg'
 import router from "@/router"
-import { mapMenusRoutes } from '@/utils/map-menus'
+import { mapMenusRoutes, initMenus } from '@/utils/map-menus'
 
 
 const loginModule = {
@@ -12,7 +12,7 @@ const loginModule = {
     return {
       token: localCache.getCatch('token') || '',
       userInfo: localCache.getCatch('userInfo') || {},
-      menus: localCache.getCatch('currentMenu') || [],
+      menus: [],
     }
   },
   getters: {},
@@ -26,13 +26,13 @@ const loginModule = {
       localCache.setCatch("userInfo", data)
     },
     changeUserMenu(state, menus) {
-      state.menus = menus
+      state.menus = initMenus(menus)
       // 获取路由
       const routes = mapMenusRoutes(menus)
-      localCache.setCatch('currentMenu', menus)
+      localCache.setCatch('currentMenu', state.menus)
       // 动态注册路由
       routes.forEach(route => {
-        router.addRoute('main', route)
+        router.addRoute('main', route) 
       })
     }
   },
@@ -63,7 +63,11 @@ const loginModule = {
         
         router.push('/main')
       } catch (error) {
-        const msg = error.data?.errors[0]?.msg
+        let msg = ""
+        if(error?.data?.errors.length) {
+          msg =  error?.data?.errors[0]?.msg
+        }
+       
         showMsg.err(msg)
         console.log(error)
       }

@@ -1,9 +1,10 @@
 import url from '@/common/helper'
 import http from '@/service' 
-
+import utils from '@/utils'
 /**
  * 获取课程列表
  * @param {Object} data 文件数据
+ *  { create_id, class_id, page, limit }
  * @returns 
  */
 export function getCourseList(data) {
@@ -20,6 +21,15 @@ export function addCourse(data) {
 }
 
 /**
+ * 获取课程详情
+ * @param {*} query 课程id
+ * @returns 
+ */
+export function getCourseDetails(query) {
+  return http.get(url.getCourseDetails + `?${utils.parseParams(query)}`)
+}
+
+/**
  * 删除单个课程
  * @param {*} courseId 
  * @returns 
@@ -30,9 +40,18 @@ export function removeCourse(courseId) {
 
 /**
  * 删除多个课程
- * @param {Array} isd 
+ * @param {Array} data id数组 
  * @returns 
  */
 export function dropManyCourse(ids) {
   return http.post(url.dropManyCourse, ids)
+}
+
+/**
+ * 课程打卡
+ * @param {*} query { course_id, userid }
+ * @returns 
+ */
+export function addClock(query) {
+  return http.get(url.addClock + `?${utils.parseParams(query)}`)
 }

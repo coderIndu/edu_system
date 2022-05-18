@@ -1,3 +1,4 @@
+import { localCache } from '@/utils/cache'
 let firstMenu = null
 
 /**
@@ -19,8 +20,8 @@ export function mapMenusRoutes(menus) {
   const _findGetRoute = (menus) => {
     for (const menu of menus) {
       if (menu.type == 2) {  // 存在二级路由
-        // console.log(menu)
-        const route = allRoutes.find(route => route.path === menu.url)
+        const role = handlerRole() // 筛选权限路由
+        const route = allRoutes.find(route => route.path === menu.url && role >= menu.role)
         if (route) routes.push(route)
       } else {
         _findGetRoute(menu.children)
@@ -28,7 +29,6 @@ export function mapMenusRoutes(menus) {
     }
   }
   _findGetRoute(menus)
-  // console.log(routes);
   firstMenu = routes[0]
   return routes
 }
@@ -42,6 +42,37 @@ export function pathMapToMenu(userMenus, currentPath) {
     } else if (menu.type === 2 && menu.url === currentPath) {
       return menu
     }
+  }
+}
+
+export function initMenus(menus) {
+  const new_menus = []
+  const role = handlerRole()
+  menus.forEach(item => {
+    const children = item.children.filter(item => {
+      if(item.type === 2 && role >= item.role) {
+        return item
+      }
+    })
+    item.children = children
+    new_menus.push(item)
+  })
+  return new_menus
+}
+
+function handlerRole() {
+  const userInfo = localCache.getCatch('userInfo')
+  const role = userInfo.role // 筛选权限路由
+  switch (role) {
+    case 'student':
+      return 0
+    case 'teacher':
+      return 1
+    case 'admin':
+      return 2
+    default:
+      return 0
+      // break;
   }
 }
 

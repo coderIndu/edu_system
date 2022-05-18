@@ -1,29 +1,30 @@
 <template>
   <div class="classplan">
-    <component :is="showLearnPage ? LearnClass : TodayTable" @showPage="showPage"></component>
+    <TodayTable @showPage="showPage"></TodayTable>
+    <LearnClass :course="selectCourse" v-if="showLearnPage" @close="showLearnPage=false"></LearnClass>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import {  ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import LearnClass from './learnClass'
 import TodayTable from './todayTable'
 
-const router = useRouter()
+// 公共数据
 const route = useRoute()
-let showLearnPage = ref(false)
 
-// 因为路由导航是异步的，导致无法实时获取query，监听属性，设置。
-function showPage() {
+
+// data数据
+const showLearnPage = ref(false)
+const selectCourse = ref('')
+
+// methods
+function showPage(select) {
   showLearnPage.value = true
+  selectCourse.value = select
 }
 
-watch(() => route.query, (query) => {
-  if(Object.keys(query).length === 0) {
-    showLearnPage.value = false
-  }
-})
 </script>
 
 <style lang="less" scoped >
@@ -32,7 +33,6 @@ watch(() => route.query, (query) => {
   height: 100%;
   box-sizing: border-box;
   border: 1px solid #f6f6f6;
-  // background-color: rgb(221, 82, 82);
 }
 
 

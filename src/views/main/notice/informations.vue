@@ -33,19 +33,20 @@ const { userid, pf_id } = store.state.userInfo
 /* data数据 */
 const showDialog = ref(false)     // 显示弹窗
 const addRef = ref(null)          // addNoticeVue的ref
-const noticeRef = ref(null)       // notice的Ref
+const noticeRef = ref(null)       // notice的Ref        
+
 /* methods */
-const confirm = () => {           // 新增
+const confirm = () => {          // 新增公告
   // console.log(noticeRef.value);
-  const { class_id, status, value } = addRef.value
-  if (!value) { $utils.el_notice("新增失败", "请输入内容", 'error'); return }
+  const { class_name, status, notice } = addRef.value
+  if (!notice) { $utils.el_notice("新增失败", "请输入内容", 'error'); return }
 
   const data = {
     create_id: userid,
     pf_id,
-    class_id,
+    class_name,
     status,
-    notice: value
+    notice
   }
 
   $http.addNotice(data).then(res => {

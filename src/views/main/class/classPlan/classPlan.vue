@@ -58,7 +58,7 @@ const widget = reactive({         // 获取列表的请求参数
   page: 1
 })
 const chooseItem = ref([])        // 选中的item
-const course_id = ref('')         // 课程id
+
 
 // methods部署
 function getData() {      // 获取课程列表

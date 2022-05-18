@@ -6,8 +6,8 @@ import http from '@/service'
  * @param {Object} data 文件数据
  * @returns 
  */
-export  function uploadFile(data, query="") {
-  return http.post(url.uploadFile + `?${query}`, data, 'formData')
+export  function uploadFile(data,) {
+  return http.post(url.uploadFile, data, 'formData')
 }
 
 /**
@@ -22,6 +22,8 @@ export function getFileList(query) {
 /**
  * 删除文件
  * ids: 文件id数组
+ * @param 文件ids
+ * @returns 
  */
 export function removeFiles(data) {
   return http.post(url.removeFiles, data)

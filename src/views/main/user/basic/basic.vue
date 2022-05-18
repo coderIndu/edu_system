@@ -49,13 +49,17 @@ const isReadonly = ref(true)
 const uploadIcon = (source) => {    // 上传头像
   const data = {
     name: source.file.name,
-    type: source.file.type,
+    mimetype: source.file.type,
     lastModifiedDate: source.file.lastModifiedDate,
     size: source.file.size,
     file: source.file,
+    create_id: userInfo.userid
   }
-  
-  $http.uploadFile(data).then(res => {
+  if(!data.mimetype.includes('image')) {
+    showMsg.err('只能上传图片！')
+    return
+  }
+  $http.uploadFile(data).then(res => {      
     formData.image = res.data.path
   }).catch(err => {
     console.log(err);
@@ -64,15 +68,17 @@ const uploadIcon = (source) => {    // 上传头像
 }
 
 // 提交数据
-const commit = () => {
+const commit = () => {        // 更新用户数据
+ 
   $http.onUpdatedUser(formData).then(res => {
     if(res.data.modifiedCount) {
       showMsg.success('更新成功！')
       store.dispatch('login/updateUserInfo', formData.userid)
-      isReadonly.value = true
     }
+    isReadonly.value = true
   }).catch(err => {
     console.log(err);
+    isReadonly.value = true
   })
 }
 // 组件挂载
@@ -107,10 +113,10 @@ onMounted(() => {
   /deep/ .el-upload {
     width: 100%;
     height: 100%;
-
     .avatar-uploader-icon, .avatar {
       width: 100%;
       height: 100%;
+      border-radius: 10px;
     }
   }
 }

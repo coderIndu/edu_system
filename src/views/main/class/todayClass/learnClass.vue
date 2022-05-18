@@ -1,37 +1,65 @@
 <template>
   <div>
-    <h2>{{ className }}</h2>
-    <div class="main">
-      <vue3VideoPlay
-        v-bind="options"
-        :title="className"
-      />
-      <div class="info">
-      
+    <pyDialogVue :title="course.name" width="80%" top="5vh" @close="close" :closeFooter="true" :modalClose="false">
+      <div class="main">
+        <!-- 资源列表 -->
+        <div class="video-list">
+          <videoListVue></videoListVue>
+        </div>
       </div>
-    </div>
+    </pyDialogVue>
   </div>
 </template>
 
 <script setup>
-import { useRoute } from "vue-router";
-import { ref, onMounted, watch } from "vue";
-import vedioConfig from './config/vedio'
+import { ref, onMounted, watch, inject, provide } from "vue";
+import pyDialogVue from "@/components/py/py-dialog.vue";
+import videoListVue from "@/components/todayClass/videoList.vue";
 
-const route = useRoute()
-
-const className = ref('')
-const options = vedioConfig
-
-watch(() => route.query, (query) => {
-  className.value = query.className
+// 公共数据
+const props = defineProps({
+  course: Object
 })
+const emits = defineEmits(['close'])
+provide('course', props.course)
 
+// data数据
+// methods 
+const close = () => {
+  emits('close')
+}
+
+onMounted(() => {
+
+})
 </script>
 
 <style lang="less" scoped>
+@import url('/src/common/common.less');
+
 .main {
   display: flex;
-  
+
+  &-left {
+    flex: .5;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+
+ .video-list {
+    // 视频列表
+    width: 100%;
+ }
+ 
+
+
+// 弹窗自定义样式
+/deep/ .el-dialog {
+  height: 900px;
+  padding: 0;
+  margin-left: 15vw;
+  overflow: auto;
 }
 </style>

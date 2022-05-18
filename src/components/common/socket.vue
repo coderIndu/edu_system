@@ -4,14 +4,18 @@
   <div class="chat">
     <div class="window">
       <!-- 聊天内容显示区域 -->
-      <div class="window-container">
-        <div class="window-container-head">软件一班</div>
+      <div class="window-container" >
+        <div class="window-container-head">聊天交流</div>
         <!-- 聊天列表 -->
-        <div class="window-container-content">
+        <div class="window-container-content" ref="contentRef">
             <div :class="[userInfo.userid === user.userid ? 'content-item-self': 'content-item']" v-for="(user,index) in chat_list" :key="index">
               <el-image v-if="user.image && user.userid!==userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="user.image" :initial-index="4" fit="cover" />
-              <span class="content-item-name">{{user.msg}}</span>
+              <div class="content-item-content">
+                <div class="content-item-name">{{user.username}}</div>
+                <div class="content-item-info">{{user.msg}}</div>
+              </div>
               <el-image v-if="user.image && user.userid===userInfo.userid" style="width: 30px; height: 30px; border-radius: 50%;" :src="user.image" :initial-index="4" fit="cover" />
+
             </div>
         </div>
       </div>
@@ -41,18 +45,21 @@
 
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue'
+import { ref, onMounted, inject, onUpdated, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import Emoji from '@/components/common/emojs.vue'
+
 
 // 设置公共数据
 const store = useStore()
 const socket = window.io.connect('http://114.132.229.173:5000')
 const userInfo = store.state.userInfo
+const $utils = inject('$utils')
 
 // 监听客户端连接
 socket.on('success', (data) => {
   // 连接成功后发送人员信息
+  delete userInfo.menu
   socket.emit('into', userInfo)
 })
 
@@ -69,9 +76,8 @@ socket.on('userlist', (list) => {
   userList.value = list
 })
 
-// 监听服务端响应事件
+// 监听服务端更新消息列表
 socket.on('resMsg', (data) => {
-  // console.log(data);
   chat_list.value = data
 })
 
@@ -80,6 +86,7 @@ const inputValue = ref("")
 const url = ref("https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg")
 const userList = ref([])
 const chat_list = ref([])
+const contentRef = ref(null)
 
 // methods部署
 const send = () => {
@@ -92,8 +99,13 @@ const emojiClick = (emoji) => {
 }
 
 // 组件挂载
-onMounted(() => {
+onUpdated(() => {
+  const el = document.querySelector('.window-container-content')
+  $utils.scrollAuto(el)   // 自动滚动条到最新一条消息
+})
 
+onMounted(() => {
+  // console.log(el.scrollTop,  );
 })
 
 </script>
@@ -139,25 +151,48 @@ onMounted(() => {
     
     &-content {
       overflow: auto;
+      &::-webkit-scrollbar { width: 0 !important } // 隐藏滚动条
     }
     .content-item, .content-item-self {
       display: flex;
       align-items: center;
-      margin: 20px;
-      
+      margin: 0px 20px;
+      &-content {
+        margin-top: 10px;
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        box-sizing: border-box;
+      }
+
       &-name {
+        margin-left: 10px;
+        font-size: 14px;
+        margin-top: 5px;
+        color: #767676;
+      }
+
+      &-info {
         margin: 0 5px;
-        height: 40px;
-        padding: 0 10px;
-        line-height: 40px;
-        background: #12b7f5;
+        // height: 30px;
+        max-width: 500px;
+        padding: 8px 15px;
+        line-height: 25px;
+        background: #d4d4d4;
         border-radius: 10px;
-        color: #fff;
+        font-size: 16px;
+        .flex-w-center();
+        color: #000;
+        word-break: break-all;
       }
     }
 
     .content-item-self {  // 自己的聊天显示
       justify-content: flex-end;
+      .content-item-name {
+        align-self: flex-end;
+        margin-right: 10px;
+      }
     }
   }
 

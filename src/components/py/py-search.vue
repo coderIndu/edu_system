@@ -1,7 +1,7 @@
 <template>
-  <pyInput placeholder="请输入搜索内容" @change="change" @clear="emits('clear')" @input="change">
+  <pyInput placeholder="请输入搜索内容" @input="change" @clear="emits('update:modelValue', input)">
     <template v-slot:append>
-      <pyButton icon="Search" @click="emits('search', input)"></pyButton>
+      <pyButton icon="Search" @click="emits('update:modelValue', input)"></pyButton>
     </template>
   </pyInput>
 </template>
@@ -11,8 +11,12 @@ import { ref, onMounted } from 'vue'
 import pyButton from './py-button.vue';
 import pyInput from './py-input.vue';
 
+defineProps({
+  modelValue: String
+})
+
 // 设置公共数据
-const emits = defineEmits(['change', 'search', 'blur', 'clear'])
+const emits = defineEmits(['change', 'search', 'blur', 'clear', 'update:modelValue'])
 
 // 设置data数据
 const input = ref('')
@@ -21,7 +25,7 @@ const input = ref('')
 // methods部署
 const change = (value) => {
   input.value = value
-  emits('change', value)
+  emits('update:modelValue', input.value)
 }
 
 // 组件挂载

@@ -1,7 +1,10 @@
 <template>
   <div class="classplan">
     <!-- 新建删除部分 -->
-    <pyTableHeadVue item="新建" edit="删除" @itemClick="showAddCourse=true" @editClick="removeMany" ></pyTableHeadVue>
+    <div class="table-header">
+      <pyTableHeadVue item="新建" edit="删除" @itemClick="showAddCourse=true" @editClick="removeMany" ></pyTableHeadVue>
+      <PySearch @clear="clearData" v-model="widget.search"></PySearch>
+    </div>
     <!-- 表格内容 -->
     <el-table :data="data.list" border size="large" @select="tableSelect" table-layout="auto" highlight-current-row :default-sort="{ prop: 'createDate', order: 'descending' }">
       <!-- 选择框 -->
@@ -36,12 +39,14 @@
 </template>
 
 <script setup>
-import { inject, ref, onMounted, reactive } from 'vue'
+import { inject, ref, onMounted, reactive, watch } from 'vue'
 import { useStore } from 'vuex'
 import UpDialog from '@/components/common/up-dialog/index.vue'
 import pyPaginationVue from '@/components/py/py-pagination.vue';
 import pyTableHeadVue from '@/components/py/py-tableHead.vue';
 import addCourse from '@/components/classPlan/addCourse.vue';
+import PySearch from '@/components/py/py-search.vue';
+import { debounce } from '@/utils/common/custom';
 // 设置公共数据
 const $http = inject('$http')
 const $utils = inject('$utils')
@@ -55,14 +60,14 @@ const showAddCourse = ref(false)  // 显示增加课程弹窗
 const widget = reactive({         // 获取列表的请求参数
   create_id: store.state.user_id,
   limit: 10,
-  page: 1
+  page: 1,
+  search: ''
 })
 const chooseItem = ref([])        // 选中的item
 
 
 // methods部署
 function getData() {      // 获取课程列表
-  console.log(widget);
   $http.getCourseList(widget).then(res => {
     data.value = res.data
   })
@@ -100,9 +105,20 @@ function removeMany() {   // 删除多个课程
     }
   })
 }
+
+
+function clearData() {
+  widget.search = ''
+  getData()
+}
 // 组件挂载
 onMounted(() => {
   getData()
+})
+
+// 监听search
+watch(() => widget.search, (val) => {
+  debounce(getData, 500)()
 })
 
 
@@ -124,5 +140,9 @@ onMounted(() => {
   .el-table {
     margin: 5px 0;
   }
+}
+.table-header {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

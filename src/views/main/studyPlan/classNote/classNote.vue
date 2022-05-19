@@ -1,7 +1,7 @@
 <template>
   <div class="edit">
     <pyTableHead item="新增" @itemClick="showRegister=true" edit="批量删除" @editClick="removeItem(chooseUser)"></pyTableHead>
-    <pySearch @search="findData" @input="findData" @clear="widget.search = ''" ></pySearch>
+    <pySearch v-model="widget.search" ></pySearch>
   </div>
   <!-- 表格内容 -->
   <el-table :data="tableData" border size="large" @select="tableSelect" table-layout="auto" highlight-current-row
@@ -53,6 +53,7 @@ import registerVue from '@/components/register.vue';
 import { useStore } from 'vuex';
 import { register_user } from '@/common/rules'
 import { showMsg } from '@/utils/showMsg';
+import { debounce } from '@/utils/common/custom';
 
 // 设置公共数据
 const $http = inject('$http')
@@ -143,11 +144,6 @@ const currentChange = (val) => {    // 分页选择
   getData()
 }
 
-const findData = (value) => {    // 查询学生
-  widget.search = value
-  $utils.debounce(getData, 1500)()
-}
-
 const removeItem = (select) => { // 删除学生
   if(!select.length) {
     showMsg.err('请选择数据！')
@@ -179,9 +175,7 @@ onMounted(() => {
 watch(
    () => widget.search,
    (val) => {
-     if(!val) {
-       getData()
-     }
+     debounce(getData, 500)()
    },
    { deep: true }
 )

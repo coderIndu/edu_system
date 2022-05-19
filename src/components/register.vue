@@ -74,6 +74,21 @@
           </el-form-item>
         </el-col>
       </el-row>
+
+       <el-row justify="space-between">
+         <!-- 地址 -->
+        <el-col :span="12">
+          <el-form-item label="地址" prop="address">
+            <el-input v-model="userForm.address" />
+          </el-form-item>
+        </el-col>
+        <!-- 邮箱 -->
+        <el-col :span="12">
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="userForm.email" />
+          </el-form-item>
+        </el-col>
+      </el-row>
       <!-- 提交表单部分 -->
       <el-form-item>
         <el-button type="primary" @click="submitForm(userForm)">提交</el-button>
@@ -126,7 +141,8 @@ const submitForm = function (formObj) {
         showMsg.success('注册成功!')
         emit('close')
       }).catch(err => {
-        showMsg.err(err)
+        const message = err?.data?.errors[0]?.msg || '注册失败'
+        showMsg.err(message)
       })
     } else {
       console.log('error submit!', fields)

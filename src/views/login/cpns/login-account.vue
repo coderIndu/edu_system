@@ -7,7 +7,7 @@
       <el-form-item label="密码" prop="password">
         <el-input autocomplete="on" type="password" v-model="account.password" @keyup.enter="emit('login')"></el-input>
       </el-form-item>
-       <el-form-item label="验证码" prop="code">
+       <el-form-item @keyup.enter="emit('login')" label="验证码" prop="code">
         <el-row>
           <el-col :span="10"><el-input size="large" autocomplete="on" type="text" v-model="account.code"></el-input></el-col>
         <el-col :span="10" class="login-code" v-html="codeSvg" @click="changeCode"></el-col>
@@ -63,6 +63,7 @@ const loginAction = (isChecked = true) => {
       }
       if(account.code.toLocaleLowerCase() !== codeText.value.toLocaleLowerCase()) {
         showMsg.err('验证码不正确！')
+        getCode()
         return
       }
       // 2. 开始登陆

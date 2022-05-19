@@ -1,5 +1,5 @@
 <template>
-  <el-form :model="formData" :rules="rules" ref="ruleFormRef">
+  <el-form :model="formData" :rules="rules" ref="ruleFormRef" label-position="center" label-width="auto">
     <el-form-item v-for="(item, index) in itemData" :label="item.label" :prop="item.prop" :key="index">
       <el-input v-model="formData[item.prop]" />
     </el-form-item>
@@ -37,6 +37,7 @@ onMounted(() => {
 })
 
 defineExpose({ formData, validate})
+
 </script>
 
 <style lang="scss" scoped>

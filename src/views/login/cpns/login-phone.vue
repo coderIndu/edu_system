@@ -2,7 +2,7 @@
   <div class="login-phone">
     <el-form label-width="70px" :rules="rules" :model="formData">
       <el-form-item label="邮箱" prop="email">
-        <el-input v-model="formData.email"></el-input>
+        <el-input v-model="formData.email" class="email-input"></el-input>
       </el-form-item>
       <el-form-item label="验证码" prop="code">
         <div class="get-code">
@@ -17,7 +17,7 @@
 
 <script setup>
 import { showMsg } from '@/utils/showMsg';
-import { ref, reactive, inject } from 'vue'
+import { ref, reactive, inject,  onUnmounted } from 'vue'
 import { useStore } from 'vuex';
 import { rules } from '../config/phone-config'
 
@@ -63,14 +63,15 @@ const sendEmailCode = () => {     // 发送邮箱
 }
 
 const check = () => {     // 验证输入的验证码是否和发送的一致
-console.log(emailCode.value, formData.code);
+  console.log(emailCode.value, formData.code);
   if(emailCode.value !== formData.code) {
     showMsg.err('验证码错误')
     return false
   } else {
-    store.dispatch("login/accountLoginAction", formData)
+    return true
   }
 }
+
 defineExpose({check, formData})
 </script>
 
@@ -81,5 +82,9 @@ defineExpose({check, formData})
     margin-left: 10px;
     width: 100px;
   }
+}
+
+.email-input {
+  // width: 200px;
 }
 </style>

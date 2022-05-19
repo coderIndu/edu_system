@@ -36,8 +36,17 @@
     <el-button @click="getFormData" type="primary" class="login-btn">立即登录</el-button>
   </div>
   <!-- 修改密码弹窗 -->
-  <pyDialog v-if="showReset" v-model="showReset" @confirm="resetPwd">
-    <pyForm :data="resetData" :initData="{ userid: '', prePwd: '', pwd: '', newPwd: '' }" ref="pyFormRef"></pyForm>
+  <pyDialog title="忘记密码" v-model="showReset" @confirm="resetPwd">
+    <pyTabsVue :data="[{label: '账号', name: 'user'}, {label:'邮箱', name:'email'}]" v-model="chooseTab">
+      <template v-slot:user>
+        <pyForm :data="resetData" :initData="{ userid: '', prePwd: '', pwd: '', newPwd: '' }" ref="pyFormRef"></pyForm>
+      </template>
+      <template v-slot:email>
+        <LoginPhone ref="resetLoginRef"></LoginPhone>
+        <PyForm :data="resetEmailData" :initData="resetEmailInit" ref="emailRef"></PyForm>
+      </template>
+    </pyTabsVue>
+    
   </pyDialog>
   <!-- 注册弹窗 -->
   <registerVue v-if="isShowDialog" @close="isShowDialog = false"></registerVue>
@@ -50,10 +59,14 @@ import LoginPhone from "./login-phone.vue";
 import { showMsg } from '@/utils/showMsg'
 import pyDialog from '@/components/py/py-dialog.vue';
 import pyForm from '@/components/py/py-form.vue';
+import pyTabsVue from '@/components/py/py-tabs.vue';
 import registerVue from '@/components/register.vue';
+import PyForm from '@/components/py/py-form.vue';
+import { useStore } from 'vuex';
 
 // 公共数据
 const $http = inject('$http')
+const store = useStore()
 
 // 定义属性
 const isChecked = ref(true)
@@ -62,6 +75,9 @@ const loginPhoneRef = ref()
 const tabName = ref("account")
 const isShowDialog = ref(false)  // 是否显示弹窗
 const showReset = ref(false)
+const emailRef = ref(null)      // email重置密码的ref
+const resetLoginRef = ref(null) // 邮箱验证码的ref
+const chooseTab = ref(null)     // 选择的重置密码的tab
 const resetData = [
   { label: '账号', prop: 'userid' },
   { label: '原密码', prop: 'prePwd' },
@@ -69,30 +85,44 @@ const resetData = [
   { label: '确认密码', prop: 'newPwd' }
 ]
 const pyFormRef = ref(null)
+const resetEmailData = [  { label: '密码', prop: 'pwd' },{ label: '确认密码', prop: 'newPwd' }]
+const resetEmailInit = { pwd: '', newPwd: ''}
 
 // 点击开始登录
 function getFormData() {
-  // console.log("点击成功")
   if (tabName.value === 'account') {
     // 用户密码登录
     loginAccountRef.value?.loginAction(isChecked.value)
   } else {
     // 手机验证码登录
-    loginPhoneRef.value.check()
+    const check = loginPhoneRef.value.check()
+    if(check) {
+      store.dispatch("login/accountLoginAction", loginPhoneRef.value.formData)
+    }
   }
 }
 
 const resetPwd = () => {
-  const data = pyFormRef.value.formData
+  let data = pyFormRef.value.formData
+  if(chooseTab.value === 'email') {
+    data = {...emailRef.value.formData, ...resetLoginRef.value.formData}
+  }
+  // console.log(data, chooseTab.value);
   if (data.pwd !== data.newPwd) {
     showMsg.err('两次密码不一致, 请重新输入')
-  } else {
+  } else if(!data.pwd || !data.newPwd) {
+    showMsg.err('请输入密码！')
+  } else if(data.prePwd === data.pwd) {
+    showMsg.err('密码一致，无效更改')
+  } else {    // 开始更改
+    resetLoginRef.value.check()   // 验证邮箱验证码是否通过
+    // console.log(data);
     $http.onUpdatedUser(data).then(res => {
       if (res.data.modifiedCount) {
         showMsg.success('更改成功')
         showReset.value = false
       } else {
-        showMsg.err(res.data.msg)
+        showMsg.err('更改失败')
       }
     }).catch(err => {
       console.log(err);

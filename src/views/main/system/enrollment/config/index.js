@@ -22,6 +22,7 @@ export const barOption = {
   series: [
     {
       data: [],
+      barWidth : 50,
       type: 'bar'
     }
   ]

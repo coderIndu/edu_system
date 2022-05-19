@@ -1,7 +1,7 @@
 import http from "@/service"
 import helper from '@/common/helper'			
 import { Base64 } from 'js-base64';
-import { PRIVIEW_URL } from "@/service/request/config";
+import { PREVIEW_URL } from "@/service/request/config";
 
 export function downloadByBlob(url, name) {
   let image = new Image()
@@ -39,9 +39,9 @@ export function downloadFile(href, name) {
   })
 }
 
-export function priviewFile(url) {
-  url = PRIVIEW_URL + url
+export function previewFile(url) {
+  url = PREVIEW_URL + url
   console.log(url);
-  let priview = `${helper.previewHost}?url=${encodeURIComponent(Base64.encode(url))}`
-  window.open(priview)
+  let preview = `${helper.previewHost}?url=${encodeURIComponent(Base64.encode(url))}`
+  window.open(preview)
 }

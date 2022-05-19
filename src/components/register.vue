@@ -1,6 +1,6 @@
 <!-- 注册页面组件 -->
 <template>
-  <el-dialog :model-value="true" @close="emit('close')" title="用户修改" top="25vh" width="40%">
+  <el-dialog :model-value="true" @close="emit('close')" title="用户新增" top="25vh" width="40%">
     <el-form
       ref="ruleFormRef"
       :model="userForm"
@@ -85,7 +85,7 @@
 
 <script setup>
 import { ref, defineEmits, reactive, inject } from 'vue'
-import { rules, form } from '../config/account-config'
+import { rules, form } from '@/views/login/config/account-config'
 import { onRegister } from '@/service/login'
 
 // 设置emit

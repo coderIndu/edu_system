@@ -218,7 +218,7 @@ onMounted(() => {
 
       .input {
         width: 99%;
-        height: 100%;
+        height: 97%;
         outline: none;
         border: none;
         resize: none;

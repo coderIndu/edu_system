@@ -1,6 +1,6 @@
 <template>
   <div class="edit">
-    <pyTableHead item="批量删除" @itemClick="removeItem(chooseStudents)"></pyTableHead>
+    <pyTableHead item="新增" @itemClick="showRegister=true" edit="批量删除" @editClick="removeItem(chooseStudents)"></pyTableHead>
     <pySearch @search="findData" @input="findData" @clear="widget.search = ''" ></pySearch>
   </div>
   <!-- 表格内容 -->
@@ -37,6 +37,8 @@
   <pyDialog title="编辑信息" v-if="showDialog" @close="showDialog = false" @confirm="confirm">
     <pyForm ref="pyFormRef" :data="diaFormArr" :rules="register_user" :initData="diaForm"></pyForm>
   </pyDialog>
+  <!-- 显示注册弹窗 -->
+  <registerVue v-if="showRegister" @close="showRegister=false"></registerVue>
 </template>
 
 <script setup>
@@ -47,6 +49,7 @@ import PyPagination from '@/components/py/py-pagination'
 import pyDialog from '@/components/py/py-dialog.vue';
 import pyForm from '@/components/py/py-form.vue';
 import pyTableHead from '@/components/py/py-tableHead.vue';
+import registerVue from '@/components/register.vue';
 import { useStore } from 'vuex';
 import { register_user } from '@/common/rules'
 import { showMsg } from '@/utils/showMsg';
@@ -74,7 +77,7 @@ const diaFormArr = ref([])
 const diaForm = ref({})
 const pyFormRef = ref(null)
 const chooseStudents = ref([])
-
+const showRegister = ref(false)
 
 // methods部署
 const getData = () => {   // 获取学生列表

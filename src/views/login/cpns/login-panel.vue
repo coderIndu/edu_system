@@ -40,17 +40,18 @@
     <pyForm :data="resetData" :initData="{userid: '',  prePwd:'', pwd:'', newPwd:''}" ref="pyFormRef"></pyForm>
   </pyDialog>
   <!-- 注册弹窗 -->
-  <Register v-if="isShowDialog" @close="isShowDialog=false"></Register>
+  <!-- <Register v-if="isShowDialog" @close="isShowDialog=false"></Register> -->
+  <registerVue v-if="isShowDialog" @close="isShowDialog=false"></registerVue>
 </template>
 
 <script setup>
 import { inject, onMounted, ref } from 'vue'
 import LoginAccount from "./login-account.vue";
 import LoginPhone from "./login-phone.vue";
-import Register from './register.vue';
 import { showMsg } from '@/utils/showMsg'
 import pyDialog from '@/components/py/py-dialog.vue';
 import pyForm from '@/components/py/py-form.vue';
+import registerVue from '@/components/register.vue';
 
 // 公共数据
 const $http = inject('$http')

@@ -136,7 +136,7 @@ const download = (select) => {
 // 文件预览
 const preview = (select) => {
   const url = select.path
-  $utils.priviewFile(url)
+  $utils.previewFile(url)
 }
 
 

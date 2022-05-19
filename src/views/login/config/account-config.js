@@ -42,7 +42,7 @@ export const rules = {
       trigger: "blur"
     }
   ],
-  class: [{
+  className: [{
     required: true,
     message: "请输入班级",
     trigger: "blur"

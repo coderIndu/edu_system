@@ -38,7 +38,7 @@
 <script setup>
 import { inject, ref, onMounted, reactive } from 'vue'
 import { useStore } from 'vuex'
-import UpDialog from '@/components/common/up-dialog'
+import UpDialog from '@/components/common/up-dialog/index.vue'
 import pyPaginationVue from '@/components/py/py-pagination.vue';
 import pyTableHeadVue from '@/components/py/py-tableHead.vue';
 import addCourse from '@/components/classPlan/addCourse.vue';

@@ -10,15 +10,19 @@
   </div>
 </template>
 
+<script>
+  console.log(window.echarts);
+</script>
 <script setup>
 import { ref, onMounted, inject } from 'vue'
 import { useStore } from 'vuex';
 import { barOption } from './config'
 
 // 设置公共数据
-const echarts = inject("$echarts")
+// const echarts = inject("$echarts")
 const $http = inject('$http')
 const store = useStore()
+const echarts = window.echarts
 
 // 设置data数据
 const userInfo = store.state.userInfo

@@ -26,7 +26,7 @@
       </div>
       <div class="file-edit">
         <pyButtonVue icon="Download" size="small" class="file-btn" @click="downloadFile(item)"></pyButtonVue>
-        <pyButtonVue icon="View" size="small" class="file-btn" @click="priviewFile(item)"></pyButtonVue>
+        <pyButtonVue icon="View" size="small" class="file-btn" @click="previewFile(item)"></pyButtonVue>
       </div>
     </div>
   </div>
@@ -72,8 +72,8 @@ const downloadFile = (item) => {    // 下载资源文件
   $utils.downloadFile(item.path, item.name)
 }
 
-const priviewFile = (item) => {     // 预览文件
-  $utils.priviewFile(item.path)
+const previewFile = (item) => {     // 预览文件
+  $utils.previewFile(item.path)
 }
 
 const changeVideo = (item) => {

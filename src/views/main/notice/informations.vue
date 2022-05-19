@@ -9,7 +9,7 @@
     <Notice ref="noticeRef"></Notice>
 
     <!-- 新建弹窗 -->
-    <pyDialogVue title="新建公告" v-if="showDialog" @close="showDialog = false" @confirm="confirm">
+    <pyDialogVue title="新建公告" v-model="showDialog" @confirm="confirm">
       <addNoticeVue ref="addRef"></addNoticeVue>
     </pyDialogVue>
   </div>
@@ -17,7 +17,7 @@
 </template>
 
 <script setup>
-import { inject, ref, reactive, onMounted } from 'vue'
+import { inject, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import pyDialogVue from '@/components/py/py-dialog.vue';
 import addNoticeVue from './addNotice'

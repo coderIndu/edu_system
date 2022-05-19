@@ -1,7 +1,6 @@
 <template>
   <div class="system">
     <!-- 专业班级 -->
-
     <div class="main-left">
       <div class="view-name">{{ userInfo.profession }}</div>
       <!-- 专业人员柱状图 -->
@@ -10,16 +9,13 @@
   </div>
 </template>
 
-<script>
-  console.log(window.echarts);
-</script>
+
 <script setup>
 import { ref, onMounted, inject } from 'vue'
 import { useStore } from 'vuex';
 import { barOption } from './config'
 
 // 设置公共数据
-// const echarts = inject("$echarts")
 const $http = inject('$http')
 const store = useStore()
 const echarts = window.echarts
@@ -63,12 +59,6 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
-.view-pro {
-  width: 50%;
-  height: 500px;
-  // background-color: #ccc;
-}
-
 .main-left {
   width: 100%;
 
@@ -76,5 +66,13 @@ onMounted(() => {
     font-size: 24px;
     font-weight: 600;
   }
+
+  .view-pro {   // 柱状图
+    width: 50%;
+    height: 500px;
+    // background-color: #ccc;
+  }
+
+  
 }
 </style>

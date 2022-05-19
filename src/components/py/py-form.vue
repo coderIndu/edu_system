@@ -36,7 +36,7 @@ onMounted(() => {
   
 })
 
-defineExpose({ formData, validate })
+defineExpose({ formData, validate})
 </script>
 
 <style lang="scss" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pyDialogVue :title="course.name" width="80%" top="5vh" @close="close" :closeFooter="true" :modalClose="false">
+    <pyDialogVue :title="course.name" width="80%" top="5vh" v-model="show" :closeFooter="true" :modalClose="false">
       <div class="main">
         <!-- 资源列表 -->
         <div class="video-list">
@@ -12,25 +12,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted, provide } from "vue";
+import { ref, onMounted, provide, watch } from "vue";
 import pyDialogVue from "@/components/py/py-dialog.vue";
 import videoListVue from "@/components/todayClass/videoList.vue";
 
 // 公共数据
 const props = defineProps({
-  course: Object
+  course: Object,
+  show: Boolean
 })
-const emits = defineEmits(['close'])
-provide('course', props.course)
+const emits = defineEmits(['update:show'])
+provide('course', props.course)       // 跨组件传递课程信息
 
 // data数据
-// methods 
-const close = () => {
-  emits('close')
-}
+const show = ref(true)
 
+// methods 
 onMounted(() => {
 
+})
+
+watch(show, (val) => {
+  emits('update:show', val)
 })
 </script>
 

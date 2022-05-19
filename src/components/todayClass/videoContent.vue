@@ -1,4 +1,5 @@
 <template>
+  <!-- 有视频课程 -->
   <div class="video" v-if="videoList.length">
     <div class="video-list-item" v-for="(item, index) in videoList" :key="index" @click="changeVideo(item)">
       <div class="item-head">

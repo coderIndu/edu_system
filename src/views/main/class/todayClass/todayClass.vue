@@ -1,19 +1,17 @@
 <template>
   <div class="classplan">
     <TodayTable @showPage="showPage"></TodayTable>
-    <LearnClass :course="selectCourse" v-if="showLearnPage" @close="showLearnPage=false"></LearnClass>
+    <LearnClass :course="selectCourse" v-if="showLearnPage" v-model="showLearnPage"></LearnClass>
   </div>
 </template>
 
 <script setup>
-import router from '@/router';
-import {  ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import {  ref } from 'vue'
 import LearnClass from './learnClass'
 import TodayTable from './todayTable'
 
 // 公共数据
-const route = useRoute()
+
 
 
 // data数据

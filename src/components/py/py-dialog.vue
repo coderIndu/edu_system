@@ -1,12 +1,11 @@
 <template>
   <div class="dialog">
     <el-dialog
-    v-model="dialogVisible"
-    :model-value="true"
+    :model-value="modelValue"
     :title="title || '弹窗'"
     :width="width || '30%'"
     @close="close"   
-    :top="top || '25vh'"
+    :top="top || '10vh'"
     :close-on-click-modal="modalClose"
   >
     <span>
@@ -24,6 +23,7 @@
 import { ref, onMounted } from 'vue'
 // 设置公共数据
 const props = defineProps({
+  modelValue: Boolean,   // 显示弹窗
   title: String,            // 标题
   width: String,            // 宽度
   cancelValue: String,      // footer的cancle按钮
@@ -32,19 +32,18 @@ const props = defineProps({
   top: String,              // top值
   modalClose: Boolean,      // 是否可以点击遮罩隐藏弹窗
 })
-const emits = defineEmits(['close', 'confirm'])
+const emits = defineEmits(['update:modelValue', 'confirm', 'close'])
 // 设置data数据
-const dialogVisible = ref(true)
 const isFooter = ref(true)
 
 // methods部署
 const close = () => {
-  dialogVisible.value = false
+  emits('update:modelValue', false)
   emits('close')
 }
 
 const confirm = () => {
-  dialogVisible.value = false
+  emits('update:modelValue', false)
   emits('confirm')
 }
 

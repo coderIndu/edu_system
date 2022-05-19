@@ -18,5 +18,13 @@ export const rules = {
       message: "请输入验证码",
       trigger: "blur"
     }
+  ],
+  email: [
+    {
+      required: true,
+      pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/,
+      message: "邮箱格式不正确",
+      trigger: "blur"
+    }
   ]
 }

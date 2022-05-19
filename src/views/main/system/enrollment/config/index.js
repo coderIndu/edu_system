@@ -16,7 +16,7 @@ export const barOption = {
   },
   yAxis: {
     type: 'value',
-    name: '人数',
+    name: '学生人数',
     nameLocation: 'end'
   },
   series: [

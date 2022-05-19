@@ -19,7 +19,8 @@
     </el-card>
   </div>
   <div class="no-notice" v-else>暂无公告</div>
-  <pyDialogVue title="编辑公告" v-if="showDialog" @close="showDialog = false" @confirm="editNotice">
+  <!-- 编辑公告 -->
+  <pyDialogVue title="编辑公告" v-model="showDialog" @confirm="editNotice">
     <addNoticeVue ref="addRef"></addNoticeVue>
   </pyDialogVue>
 </template>
@@ -66,7 +67,7 @@ const initStatus = (status) => {
 // methods部分
 const getList = () => {           // 获取列表
   const query = {
-    class_name: className,
+    // class_name: className,
     userid
   }
   $http.getNoticeList(query).then(res => {

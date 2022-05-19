@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialogTableVisible" top="5%" title="文件管理" @close="close" width="80%">
+  <el-dialog :model-value="show" top="5%" title="文件管理" @close="close" width="80%">
     <!-- 上传下载部分 -->
     <div class="header-edit" width="150px">
       <!-- 上传 -->
@@ -50,13 +50,13 @@ const $utils = inject('$utils')
 const { showMsg } = inject('$utils')
 const store = useStore()
 const props = defineProps({
-  courseInfo: Object
+  courseInfo: Object,
+  show: Boolean
 })
 // 设置emit
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'update:show'])
 
 // 设置data
-const dialogTableVisible = ref(true)  // 是否显示
 const tableData = ref([])       // table数据
 const chooseItem = ref([])      // 选中的item
 const tableRef = ref(null)      // table的ref
@@ -66,8 +66,7 @@ const tableRef = ref(null)      // table的ref
  */
 // 弹窗关闭事件
 const close = () => {
-  dialogTableVisible.value = false
-  emit('close')
+  emit('update:show', false)
 }
 
 // 选中

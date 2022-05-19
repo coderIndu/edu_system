@@ -8,7 +8,11 @@ import url from '@/common/helper.js'
  * @returns 
  */
 export function accountLoginRequest(account) {
-  return http.post(url.login, { user: account })
+  let api = url.login
+  if(account.email) {
+    api = url.loginEmail
+  }
+  return http.post(api, { user: account })
 }
 
 

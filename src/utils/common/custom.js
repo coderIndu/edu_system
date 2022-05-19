@@ -36,7 +36,6 @@ export function debounce(fn, delay=1000) {
       clearTimeout(timer)
     }
     timer = setTimeout(() => {
-      // console.log(23333);
       fn.apply(this, args)
     }, delay);
   }

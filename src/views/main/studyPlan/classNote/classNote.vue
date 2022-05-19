@@ -1,11 +1,11 @@
 <template>
   <div class="edit">
-    <pyTableHead item="新增" @itemClick="showRegister=true" edit="批量删除" @editClick="removeItem(chooseStudents)"></pyTableHead>
+    <pyTableHead item="新增" @itemClick="showRegister=true" edit="批量删除" @editClick="removeItem(chooseUser)"></pyTableHead>
     <pySearch @search="findData" @input="findData" @clear="widget.search = ''" ></pySearch>
   </div>
   <!-- 表格内容 -->
   <el-table :data="tableData" border size="large" @select="tableSelect" table-layout="auto" highlight-current-row
-    :default-sort="{ prop: 'createDate', order: 'descending' }">
+    :default-sort="{ prop: 'createDate', order: 'descending' }" ref="tableRef">
     <!-- 选择框 -->
     <el-table-column type="selection" width="55" />
     <!-- 日期 -->
@@ -34,7 +34,7 @@
   </el-table>
   <PyPagination :total="widget.total" :limit="widget.limit" @currentChange="currentChange"></PyPagination>
   <!-- 编辑信息弹窗 -->
-  <pyDialog title="编辑信息" v-if="showDialog" @close="showDialog = false" @confirm="confirm">
+  <pyDialog title="编辑信息" v-model="showDialog" @confirm="confirm">
     <pyForm ref="pyFormRef" :data="diaFormArr" :rules="register_user" :initData="diaForm"></pyForm>
   </pyDialog>
   <!-- 显示注册弹窗 -->
@@ -42,7 +42,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject, reactive, watch } from 'vue'
+import { ref, onMounted, inject, reactive, watch, nextTick } from 'vue'
 import pyIcon from '@/components/py/py-icon'
 import pySearch from '@/components/py/py-search.vue';
 import PyPagination from '@/components/py/py-pagination'
@@ -72,12 +72,13 @@ const widget = reactive({
   limit: 10,
   search: ''
 })
-const showDialog = ref(false)
-const diaFormArr = ref([])
-const diaForm = ref({})
-const pyFormRef = ref(null)
-const chooseStudents = ref([])
-const showRegister = ref(false)
+const pyFormRef = ref(null)         // 注册表单的ref
+const tableRef = ref(null)          // 列表的ref
+const showDialog = ref(false)       // 显示编辑信息弹窗
+const showRegister = ref(false)     // 显示注册弹窗
+const diaFormArr = ref([])          // 注册表单列表数组
+const diaForm = ref({})             // 注册表单数据
+const chooseUser = ref([])          // 当前选择的用户
 
 // methods部署
 const getData = () => {   // 获取学生列表
@@ -90,10 +91,11 @@ const getData = () => {   // 获取学生列表
 }
 
 const tableSelect = (select) => {   // 选择table
-  chooseStudents.value = select
+  chooseUser.value = select
 }
 
 const editItem = (select) => {   // 显示学生信息弹窗
+
   diaForm.value = select
   diaFormArr.value = [
     {
@@ -128,7 +130,6 @@ const confirm = () => {             // 提交表单数据，更新学生信息
         showMsg.success('修改成功')
         showDialog.value = false
         getData()
-
       }
     })
   }, () => {
@@ -148,18 +149,23 @@ const findData = (value) => {    // 查询学生
 }
 
 const removeItem = (select) => { // 删除学生
+  if(!select.length) {
+    showMsg.err('请选择数据！')
+    return
+  }
   const ids = select.map(item => item.userid)
+
   $utils.el_msgBox('确认删除学生？', () => {
     $http.delUser(ids).then(res => {
       if (res.data.deletedCount) {
         showMsg.success('删除成功')
-        chooseStudents.value = []
         getData()   // 更新列表
+        chooseUser.value = []
+        tableRef.value.clearSelection()
       }
     })
   })
-
-
+ 
 }
 
 // 组件挂载

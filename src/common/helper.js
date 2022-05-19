@@ -2,6 +2,7 @@ const previewHost = 'http://114.132.229.173:8012/onlinePreview'
 export default {
   // 用户相关
   login: "/users/login",        // 用户登录
+  loginEmail: '/users/login/email', // 邮箱登录
   getInfo: "/user",             // 获取用户信息
   register: '/users/register',  // 用户注册
   updateUser: '/user/update',   // 用户更新
@@ -34,5 +35,9 @@ export default {
 
   // 获取统计数据相关
   getCountList: '/count/getlist',         // 获取专业统计课程
+
+  // 登录图形验证码相关
+  getLoginCode: '/code/getCode',          // 获取登录的图形验证码
+  sendEmailCode: '/code/sendEmail',       // 发送邮箱验证码      
 }
 

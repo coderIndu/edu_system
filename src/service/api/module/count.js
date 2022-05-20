@@ -11,3 +11,11 @@ import { parseParams } from "@/utils/common/formatter";
 export function getCountList(query) {
   return http.get(helper.getCountList+`?${parseParams(query)}`)
 }
+
+/**
+ * 获取专业班级列表
+ * @returns 专业班级列表
+ */
+export function getPfList() {
+  return http.get(helper.getPfList)
+}

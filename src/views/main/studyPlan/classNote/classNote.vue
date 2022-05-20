@@ -168,6 +168,7 @@ const removeItem = (select) => { // 删除学生
 onMounted(() => {
   if(props.role) {    // 
     widget.role = props.role
+    delete widget.pf_id
   }
   getData()
 })

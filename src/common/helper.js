@@ -35,9 +35,10 @@ export default {
 
   // 获取统计数据相关
   getCountList: '/count/getlist',         // 获取专业统计课程
-
+  getPfList: '/count/getPfList',          // 获取专业班级列表
   // 登录图形验证码相关
   getLoginCode: '/code/getCode',          // 获取登录的图形验证码
-  sendEmailCode: '/code/sendEmail',       // 发送邮箱验证码      
+  sendEmailCode: '/code/sendEmail',       // 发送邮箱验证码     
+  
 }
 

@@ -64,13 +64,14 @@
          <!-- 专业 -->
         <el-col :span="12">
           <el-form-item label="专业" prop="profession">
-            <el-input v-model="userForm.profession" />
+            <pySelect v-if="pf_list.length" :options="pf_list" v-model="userForm.profession"></pySelect>
           </el-form-item>
         </el-col>
         <!-- 班级 -->
         <el-col :span="12">
           <el-form-item label="班级" prop="className">
-            <el-input v-model="userForm.className" />
+            <!-- {{class_list(userForm.profession)}} -->
+              <pySelect :options="class_list(userForm.profession)" v-model="userForm.className" ></pySelect>
           </el-form-item>
         </el-col>
       </el-row>
@@ -99,13 +100,14 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, reactive, inject } from 'vue'
+import { ref, defineEmits, reactive, inject, onMounted, watch, computed } from 'vue'
 import { rules, form } from '@/views/login/config/account-config'
 import { onRegister } from '@/service/login'
+import pySelect from './py/py-select.vue';
 
 // 设置emit
 const emit = defineEmits(['close']);
-
+const $http = inject('$http')
 // 设置data
 const { showMsg } = inject('$utils')
 let userForm = reactive(form)       // 表单数据
@@ -122,6 +124,20 @@ const options = [                   // 选择身份
     label: '教师',
   },
 ]
+const pf_list = ref([])
+const choosePf = ref('')
+
+/* computed */
+const class_list = computed(() => {
+  
+  return (option) => {
+    const list = pf_list.value.find(item => item.label === option)
+    if(list) {
+      return list.children
+    }
+    // return list
+  }
+})
 
 /* 设置methods */
 // 确认密码验证
@@ -132,6 +148,7 @@ function pwdValidate(prop, valid) {
 }
 // 提交表单
 const submitForm = function (formObj) {
+  console.log(userForm);
   // 提交验证
   ruleFormRef.value.validate((valid, fields) => {
     console.log(valid);
@@ -157,6 +174,32 @@ const resetForm = function () {
     userForm[item] = ''
   })
 }
+
+const getPfList = () => {
+  $http.getPfList().then(res => {
+    pf_list.value = res.data.map((item, index) => {
+      // 格式化班级options
+      const children = item.children.map(i => {
+        return {
+          label: i.name,
+          value: i.id
+        }
+      })
+      // 格式化专业options
+      return {
+        label: item.name,
+        value: item.id,
+        children
+      }
+    })
+    console.log(pf_list.value);
+  })
+}
+
+onMounted(() => {
+  getPfList()
+})
+
 </script>
 
 <style lang="less" scoped>

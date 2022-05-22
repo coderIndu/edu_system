@@ -32,7 +32,7 @@
       </template>
     </el-table-column>
   </el-table>
-  <PyPagination :total="widget.total" :limit="widget.limit" @currentChange="currentChange"></PyPagination>
+  <PyPagination :page="widget.page" :total="widget.total" :limit="widget.limit" @currentChange="currentChange"></PyPagination>
   <!-- 编辑信息弹窗 -->
   <pyDialog title="编辑信息" v-model="showDialog" @confirm="confirm">
     <pyForm ref="pyFormRef" :data="diaFormArr" :rules="register_user" :initData="diaForm"></pyForm>
@@ -45,7 +45,7 @@
 import { ref, onMounted, inject, reactive, watch, nextTick } from 'vue'
 import pyIcon from '@/components/py/py-icon'
 import pySearch from '@/components/py/py-search.vue';
-import PyPagination from '@/components/py/py-pagination'
+import PyPagination from '@/components/py/py-pagination.vue'
 import pyDialog from '@/components/py/py-dialog.vue';
 import pyForm from '@/components/py/py-form.vue';
 import pyTableHead from '@/components/py/py-tableHead.vue';
@@ -86,6 +86,7 @@ const getData = () => {   // 获取学生列表
   $http.getUserList(widget).then(res => {
     widget.total = res.data.total
     tableData.value = res.data.list
+    // widget.page = res.data.page
   }).catch(err => {
     console.log(err);
   })
@@ -174,9 +175,11 @@ onMounted(() => {
 })
 
 watch(
-   () => widget.search,
-   (val) => {
-     debounce(getData, 500)()
+   () => widget.search, (val) => {
+     debounce(() => {
+       widget.page = 1
+       getData()
+     }, 500)()
    },
    { deep: true }
 )

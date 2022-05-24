@@ -8,6 +8,7 @@
       </template>
       <div class="notice-item">
         <span>{{ item.notice }}</span>
+        <!-- 判断紧急情况 -->
         <el-tag v-if="item.status === 0" effect="dark" type="info" style="margin-left: 20px;">{{ initStatus(item.status) }}</el-tag>
         <el-tag v-else-if="item.status === 1" effect="dark" type="warning" style="margin-left: 20px;">{{ initStatus(item.status) }}</el-tag>
         <el-tag v-else effect="dark" type="danger" style="margin-left: 20px;">{{ initStatus(item.status) }}</el-tag>
@@ -18,7 +19,7 @@
       </div>
     </el-card>
   </div>
-  <div class="no-notice" v-else>暂无公告</div>
+  <div class="no-notice" v-if="noNotice">暂无公告</div>
   <!-- 编辑公告 -->
   <pyDialogVue title="编辑公告" v-model="showDialog" @confirm="editNotice">
     <addNoticeVue ref="addRef"></addNoticeVue>
@@ -47,6 +48,7 @@ const statusList = reactive({
 const showDialog = ref(false)     // 编辑窗口
 const currentNotice = ref({})     // 编辑的内容
 const addRef = ref(null)          // 编辑后的内容获取
+const noNotice = ref(false)
 
 /** computed */
 const initStatus = (status) => {
@@ -72,6 +74,7 @@ const getList = () => {           // 获取列表
   }
   $http.getNoticeList(query).then(res => {
     noticeList.value = res.data
+    if(!noticeList.value.length) noNotice.value = true
   })
 }
 
@@ -118,6 +121,7 @@ onMounted(() => {
 </script>
 
 <style lang="less" scoped>
+
 .card-header-time {
   font-size: 14px;
   color: #ccc;

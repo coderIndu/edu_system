@@ -32,7 +32,7 @@
     <!-- 分页组件 -->
     <pyPaginationVue :total="data.total" :limit="data.limit" @currentChange="currentChange"></pyPaginationVue>
     <!-- 上传资源弹窗 -->
-    <UpDialog  v-model="showUpload" :courseInfo="chooseItem"></UpDialog>
+    <UpDialog v-if="showUpload" v-model="showUpload" :courseInfo="chooseItem"></UpDialog>
     <!-- 添加课程弹窗 -->
     <addCourse v-if="showAddCourse" @close="showAddCourse=false" @confirm="getData"></addCourse>
   </div>

@@ -32,6 +32,10 @@ const loginModule = {
       localCache.setCatch('currentMenu', state.menus)
       // 动态注册路由
       routes.forEach(route => {
+        route.mate = {
+          keepAlive: true
+        }
+        // console.log(route);
         router.addRoute('main', route) 
       })
       router.options.routes.push(...routes)

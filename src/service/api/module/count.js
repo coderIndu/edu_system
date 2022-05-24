@@ -19,3 +19,11 @@ export function getCountList(query) {
 export function getPfList() {
   return http.get(helper.getPfList)
 }
+
+/**
+ * 近七天用户注册数据
+ * @returns Array
+ */
+export function getSeven() {
+  return http.get(helper.getSeven)
+}

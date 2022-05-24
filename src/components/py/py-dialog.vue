@@ -1,5 +1,5 @@
 <template>
-  <div class="dialog">
+  <div class="dialog" v-if="modelValue">
     <el-dialog
     :model-value="modelValue"
     :title="title || '弹窗'"
@@ -23,10 +23,10 @@
 import { ref, onMounted } from 'vue'
 // 设置公共数据
 const props = defineProps({
-  modelValue: Boolean,   // 显示弹窗
+  modelValue: Boolean,      // 显示弹窗
   title: String,            // 标题
   width: String,            // 宽度
-  cancelValue: String,      // footer的cancle按钮
+  cancelValue: String,      // footer的cancel按钮
   confirmValue: String,     // footer的confirm按钮
   closeFooter: Boolean,     // 是否显示footer
   top: String,              // top值

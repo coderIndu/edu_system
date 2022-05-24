@@ -71,7 +71,7 @@
         <el-col :span="12">
           <el-form-item label="班级" prop="className">
             <!-- {{class_list(userForm.profession)}} -->
-              <pySelect :options="class_list(userForm.profession)" v-model="userForm.className" ></pySelect>
+              <pySelect :multiple="userForm.role==='teacher'" :options="class_list(userForm.profession)" v-model="userForm.className" ></pySelect>
           </el-form-item>
         </el-col>
       </el-row>

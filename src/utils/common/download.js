@@ -3,6 +3,11 @@ import helper from '@/common/helper'
 import { Base64 } from 'js-base64';
 import { PREVIEW_URL } from "@/service/request/config";
 
+/**
+ * 下载图片
+ * @param {*} url 图片链接
+ * @param {*} name 图片名称
+ */
 export function downloadByBlob(url, name) {
   let image = new Image()
   image.setAttribute('crossOrigin', 'anonymous')
@@ -22,6 +27,11 @@ export function downloadByBlob(url, name) {
   }
 }
 
+/**
+ * 下载blob流数据文件
+ * @param {*} href 
+ * @param {*} name 
+ */
 export function downloadFile(href, name) {
   http.get(href, {}, 'blob').then(res => {
     // console.log(111, res);
@@ -39,6 +49,10 @@ export function downloadFile(href, name) {
   })
 }
 
+/**
+ * 预览图片
+ * @param {*} url 
+ */
 export function previewFile(url) {
   url = PREVIEW_URL + url
   console.log(url);

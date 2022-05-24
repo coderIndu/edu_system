@@ -19,7 +19,7 @@
       </el-button>
     </div>
     <!-- 主体表单部分 -->
-    <el-table class="el-dialog__body" :data="tableData" stripe @select="select" ref="tableRef">
+    <el-table v-loading="loading"  element-loading-text="上传中" class="el-dialog__body" :data="tableData" stripe @select="select" ref="tableRef">
       <el-table-column type="selection" width="55" />
       <el-table-column prop="name" label="文件名" />
       <el-table-column prop="size" label="文件大小">
@@ -60,6 +60,7 @@ const emit = defineEmits(['close', 'update:show'])
 const tableData = ref([])       // table数据
 const chooseItem = ref([])      // 选中的item
 const tableRef = ref(null)      // table的ref
+const loading = ref(false)      // 上传显示加载
 
 /**
  * 设置methods
@@ -76,6 +77,7 @@ const select = (select) => {
 
 // 上传文件
 const handleChange = (source) => {
+  loading.value = true
   // 1. 文件信息
   const data = {
     name: source.file.name,
@@ -93,9 +95,11 @@ const handleChange = (source) => {
     if(res.status === 200) {
       showMsg.success("上传成功")
       getFileList()
+      loading.value = false
     } 
   }).catch(err => {
       showMsg.err('上传失败')
+      loading.value = false
   })
 }
 
@@ -140,6 +144,7 @@ const preview = (select) => {
 
 
 onMounted(() => {
+  // console.log(2333)
   getFileList()
 })
 

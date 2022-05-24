@@ -1,11 +1,9 @@
 <template>
-  <el-select v-model="value" class="m-2" placeholder="Select" size="large" @change="emits('update:valueModel', value)">
-    <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.label"
-    />
+  <el-select 
+    v-model="value" class="m-2" placeholder="Select" 
+    size="large" :multiple="multiple"
+    @change="emits('update:valueModel', value)">
+    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.label"/>
   </el-select>
 </template>
 
@@ -15,7 +13,8 @@ import { ref, onMounted } from 'vue'
 // 设置公共数据
 const props = defineProps({
   valueModel: String,
-  options: Array
+  options: Array,
+  multiple: Boolean
 })
 // 
 const emits = defineEmits(['update:valueModel'])

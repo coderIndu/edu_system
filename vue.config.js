@@ -35,7 +35,8 @@ module.exports = {
     // open: true,
     proxy: {
       '/api': {         // axios请求跨域
-        target: 'http://114.132.229.173:5000/api',
+        // target: 'http://114.132.229.173:5000/api',
+        target: 'http://127.0.0.1:5000/api',
         ws: true,
         changeOrigin:true,//允许跨域
         pathRewrite: {
@@ -43,7 +44,8 @@ module.exports = {
         }
       },
       '/resource': {    // 请求资源跨域
-        target: 'http://114.132.229.173:5000/api/resource/',
+        // target: 'http://114.132.229.173:5000/api/resource/',
+        target: 'http://127.0.0.1:5000/api/resource/',
         ws: true,
         changeOrigin:true,//允许跨域
         pathRewrite: {

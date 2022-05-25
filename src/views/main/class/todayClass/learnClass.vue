@@ -19,9 +19,9 @@ import videoListVue from "@/components/todayClass/videoList.vue";
 // 公共数据
 const props = defineProps({
   course: Object,
-  show: Boolean
+  modelValue: Boolean
 })
-const emits = defineEmits(['update:show'])
+const emits = defineEmits(['update:modelValue'])
 provide('course', props.course)       // 跨组件传递课程信息
 
 // data数据
@@ -33,7 +33,7 @@ onMounted(() => {
 })
 
 watch(show, (val) => {
-  emits('update:show', val)
+  emits('update:modelValue', val)
 })
 </script>
 

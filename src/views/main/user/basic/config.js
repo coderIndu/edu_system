@@ -35,6 +35,10 @@ export const formArr = [
     label: "手机号" 
   },
   {
+    value: "email",
+    label: "邮箱"
+  },
+  {
     value: "updateDate",
     label: "创建日期"
   }

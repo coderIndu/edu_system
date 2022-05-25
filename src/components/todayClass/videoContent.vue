@@ -57,7 +57,7 @@ const getCourseDetails = () => {    // 获取课程关联的文件以及聊天�
   const data = {
     id: course.id
   }
-  $http.getCourseDetails(data).then(res => {
+  $http.getCourseDetails(data).then(res => {    // 获取课程详情
     if (res.status === 200) {
       videoList.value = res.data.file_list.filter(item => item.mimetype.includes('video'))
       fileList.value = res.data.file_list.filter(item => !item.mimetype.includes('video'))

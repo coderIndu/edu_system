@@ -58,8 +58,7 @@ const loginModule = {
 
         // 2. 请求用户信息
         await dispatch("updateUserInfo", userid)
-        // const userInfo = await requestUserInfoById(userid)
-        // commit("changeUserInfo", userInfo.data.user)
+ 
         // 2.1 设置rootState初始化userInfo  
         commit('initState', {}, {root: true})
 
@@ -72,9 +71,7 @@ const loginModule = {
         if(error?.data?.errors.length) {
           msg =  error?.data?.errors[0]?.msg
         }
-       
         showMsg.err(msg)
-        console.log(error)
       }
     },
     initLoginState({ commit, state }) {

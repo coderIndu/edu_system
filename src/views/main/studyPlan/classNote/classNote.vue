@@ -152,7 +152,7 @@ const removeItem = (select) => { // 删除学生
   }
   const ids = select.map(item => item.userid)
 
-  $utils.el_msgBox('确认删除学生？', () => {
+  $utils.el_msgBox('确认删除？', () => {
     $http.delUser(ids).then(res => {
       if (res.data.deletedCount) {
         showMsg.success('删除成功')

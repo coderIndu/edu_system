@@ -29,7 +29,7 @@ const emit = defineEmits(['showPage'])
 const userInfo = store.state.userInfo
 const widget = reactive({
   class_id: userInfo.class_id,
-  create_id: userInfo.userid,
+  create_id: userInfo.role !== 'student' && userInfo.userid,
   page: 1,
   size: 10
 })

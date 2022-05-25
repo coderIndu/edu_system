@@ -35,9 +35,15 @@ export const lineOption = {
   title: {
     text: "近七天注册用户数"
   },
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    },
+  },
   xAxis: {
     type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    data: []
   },
   yAxis: {
     type: 'value'

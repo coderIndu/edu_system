@@ -32,12 +32,13 @@ import { useStore } from 'vuex'
 import pyButton from '@/components/py/py-button'
 import pyDialogVue from '@/components/py/py-dialog.vue';
 import addNoticeVue from './addNotice'
+import { userInfo } from 'os';
 
 // 设置公共数据
 const $http = inject('$http')
 const $utils = inject('$utils')
 const store = useStore()
-const { userid, className } = store.state.userInfo
+const { userid, className, role } = store.state.userInfo
 
 // 设置data数据
 const noticeList = ref([])        // 公告列表
@@ -69,7 +70,7 @@ const initStatus = (status) => {
 // methods部分
 const getList = () => {           // 获取列表
   const query = {
-    // class_name: className,
+    class_name: role === 'student' && className,
     userid
   }
   $http.getNoticeList(query).then(res => {

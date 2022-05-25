@@ -49,7 +49,7 @@ const confirm = () => {          // 新增公告
     notice
   }
 
-  $http.addNotice(data).then(res => {
+  $http.addNotice(data).then(res => {   // 添加公告
     if (res.data) {
       $utils.el_notice("新增公告", "新增成功", 'success')
       noticeRef.value.getList()     // 刷新列表

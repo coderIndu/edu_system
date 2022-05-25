@@ -55,3 +55,13 @@ export function dropManyCourse(ids) {
 export function addClock(query) {
   return http.get(url.addClock + `?${utils.parseParams(query)}`)
 }
+
+
+/**
+ * 获取课程的学生打卡列表
+ * @param {*} query {course_id}
+ * @returns 
+ */
+export function getClockList(query) {
+  return http.get(url.getClockList + `?${utils.parseParams(query)}`)
+}

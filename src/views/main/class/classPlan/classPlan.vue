@@ -24,6 +24,7 @@
       <!-- 操作 -->
       <el-table-column prop="address" label="操作" class="edit">
         <template #default="scope">
+          <el-button type="primary" @click="getClockList(scope.row)" size="small" plain>打卡概况</el-button>
           <el-button type="primary" @click="showUpload=true;chooseItem=scope.row" size="small" plain>上传资源</el-button>
           <el-button type="danger" size="small" plain @click="removeOne(scope.row)">删除</el-button>
         </template>
@@ -35,6 +36,15 @@
     <UpDialog v-if="showUpload" v-model="showUpload" :courseInfo="chooseItem"></UpDialog>
     <!-- 添加课程弹窗 -->
     <addCourse v-if="showAddCourse" @close="showAddCourse=false" @confirm="getData"></addCourse>
+    <!-- 课程打卡详情 -->
+    <PyDialog title="打卡列表" v-model="showClock" width="70%">
+      <el-table :data="clockList"  highlight-current-row>
+        <el-table-column  prop="userid" label="学号"></el-table-column>
+        <el-table-column  prop="username" label="姓名"></el-table-column>
+        <el-table-column  prop="className" label="班级"></el-table-column>
+        <el-table-column  prop="isClock" label="是否打卡"></el-table-column>
+      </el-table>
+    </PyDialog>
   </div>
 </template>
 
@@ -47,6 +57,7 @@ import pyTableHeadVue from '@/components/py/py-tableHead.vue';
 import addCourse from '@/components/classPlan/addCourse.vue';
 import PySearch from '@/components/py/py-search.vue';
 import { debounce } from '@/utils/common/custom';
+import PyDialog from '@/components/py/py-dialog.vue';
 // 设置公共数据
 const $http = inject('$http')
 const $utils = inject('$utils')
@@ -64,7 +75,8 @@ const widget = reactive({         // 获取列表的请求参数
   search: ''
 })
 const chooseItem = ref([])        // 选中的item
-
+const clockList = ref([])         // 打卡学生列表
+const showClock = ref(false)      // 显示打卡弹窗
 
 // methods部署
 function getData() {      // 获取课程列表
@@ -94,7 +106,7 @@ function removeOne(select) {  // 删除单个课程
   })
 }
 
-function removeMany() {   // 删除多个课程
+function removeMany() {      // 删除多个课程
   const ids = chooseItem.value.map(item => item.id)
   $http.dropManyCourse({ids}).then(res => {
     if(res.data.deletedCount) {
@@ -106,8 +118,17 @@ function removeMany() {   // 删除多个课程
   })
 }
 
+function getClockList(row) {    // 获取课程的打卡列表
+  // console.log(row);
+  $http.getClockList({course_id: row.id}).then(res => {
+    clockList.value = res.data
+    console.log(clockList.value[0].isClock);
+    showClock.value = true       
 
-function clearData() {
+  })
+}
+
+function clearData() {      // 清空搜索框时重新获取数据
   widget.search = ''
   getData()
 }

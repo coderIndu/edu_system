@@ -29,6 +29,7 @@ const barData = ref([])
 // methods部署
 const initOption = (option, className) => {   // 挂载数据到Dom
   const charDom = document.querySelector(className)
+  charDom.removeAttribute('_echarts_instance_')   // 防止页面路由切换echarts不会重新渲染
   const myChart = echarts.init(charDom)
   option && myChart.setOption(option);
 }
@@ -68,7 +69,6 @@ const initData = (data, option) => {         // 处理数据和配置
 onMounted(() => {
   getBarData()
   getSevenData()
-  
 })
 
 </script>

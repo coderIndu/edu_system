@@ -6,7 +6,7 @@
 </template>
 
 <script setup>
-import {  ref } from 'vue'
+import {  ref, watch } from 'vue'
 import LearnClass from './learnClass'
 import TodayTable from './todayTable'
 
@@ -22,18 +22,8 @@ const selectCourse = ref('')
 function showPage(select) {
   selectCourse.value = select
   showLearnPage.value = true
-  // const route = {
-  //   name: 'studyDetails',
-  //   path: '/main/class/studyDetails',
-  //   component: LearnClass,
-  // }
-  // router.addRoute('main', route)
-  // router.options.routes.push(route)
-  // router.push('/main/class/studyDetails?course='+selectCourse.value)
-  // console.log(router.options.routes);
-  
-  
 }
+
 
 </script>
 

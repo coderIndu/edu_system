@@ -32,6 +32,7 @@ export default {
   
   // 课程打卡相关 
   addClock: '/course/addClock',           // 课程打卡
+  getClockList: '/course/getClockList',   // 获取课程打卡学生情况
 
   // 获取统计数据相关
   getCountList: '/count/getlist',         // 获取专业统计课程

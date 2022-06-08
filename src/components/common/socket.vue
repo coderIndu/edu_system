@@ -52,7 +52,7 @@ import Emoji from '@/components/common/emojs.vue'
 
 // 设置公共数据
 const store = useStore()
-const socket = window.io.connect('http://127.0.0.1:5000')
+const socket = window.io.connect('http://114.132.229.173:5000')
 const userInfo = store.state.userInfo
 const $utils = inject('$utils')
 
